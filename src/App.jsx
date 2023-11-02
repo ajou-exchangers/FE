@@ -1,8 +1,7 @@
-import Map from './pages/map';
-import Login from './pages/login';
+import Router from './components/commons/router';
 
 function App() {
-  return <Login />;
+  return <Router />;
 }
 
 export default App;
