@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Link } from 'react-router-dom';
 
 export const Navigation = styled.nav`
   display: flex;
@@ -34,6 +35,8 @@ export const NavigationList = styled.ul`
 
 export const NavigationItem = styled.li`
   margin-right: 1rem;
+  color: #fff;
+
   &:last-of-type {
     margin-right: 0;
   }
@@ -43,7 +46,14 @@ export const NavigationItem = styled.li`
   }
 `;
 
-export const NavigationLink = styled.a`
+export const NavigationLink = styled(Link)`
   color: #fff;
   text-decoration: none;
+
+  // 마우스 올렸을 때 색상 변경
+  &:hover {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+  }
 `;
