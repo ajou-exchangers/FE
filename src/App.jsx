@@ -1,15 +1,16 @@
 import Layout from './components/commons/layout';
-import Router from './components/commons/router';
+import RouteList from './components/commons/routes';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 function App() {
   //prettier-ignore
   return (
-    <>
-      <Router />
+    <Router>
       <Layout>
-        <div>ㅎㅇ</div>
+        <RouteList />
+        <div>컨텐츠</div>
       </Layout>
-    </>
+    </Router>
   )
 }
 

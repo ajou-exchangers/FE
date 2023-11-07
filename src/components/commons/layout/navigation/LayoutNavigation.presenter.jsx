@@ -5,6 +5,7 @@ import {
   faUser,
   faBell,
 } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 export default function LayoutNavigationUI(props) {
   return (
@@ -15,7 +16,7 @@ export default function LayoutNavigationUI(props) {
       </S.NavigationLeft>
       <S.NavigationList>
         <S.NavigationItem>
-          <S.NavigationLink to="/campus">Campus</S.NavigationLink>
+          <S.NavigationLink to="/map">Campus</S.NavigationLink>
         </S.NavigationItem>
         <S.NavigationItem>
           <S.NavigationLink to="/boards">Board</S.NavigationLink>
