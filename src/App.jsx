@@ -8,7 +8,7 @@ function App() {
     <Router>
       <Layout>
         <RouteList />
-        <div>컨텐츠</div>
+
       </Layout>
     </Router>
   )
