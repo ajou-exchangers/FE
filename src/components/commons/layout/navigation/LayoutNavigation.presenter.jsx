@@ -12,7 +12,7 @@ export default function LayoutNavigationUI(props) {
     <S.Navigation>
       <S.NavigationLeft>
         <FontAwesomeIcon icon={faGlobeAmericas} style={{ color: '#fcfcfc' }} />
-        <S.NavigationTitle>Exchangers</S.NavigationTitle>
+        <S.NavigationTitle><S.NavigationLink to="/">Exchangers</S.NavigationLink></S.NavigationTitle>
       </S.NavigationLeft>
       <S.NavigationList>
         <S.NavigationItem>
