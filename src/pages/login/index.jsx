@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 const FormContainer = styled.div`
   text-align: center;
@@ -26,7 +26,7 @@ const Input = styled.input`
   }
 
   &::after {
-    content: "";
+    content: '';
     display: block;
     height: 1px;
     background: #000;
@@ -42,7 +42,7 @@ const Input = styled.input`
 const Button = styled.button`
   font-size: 1em;
   padding: 10px 20px;
-  background-color: #391A28;
+  background-color: #391a28;
   color: #fff;
   border: none;
   cursor: pointer;
@@ -77,32 +77,35 @@ export default function LoginPage() {
       <h1>LOGIN</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormGroup>
-          <Label htmlFor='input_id'>
+          <Label htmlFor="input_id">
             Email
-            
             <Controller
               name="input_id"
               control={control}
               render={({ field }) => (
-                <Input type='text' {...field} placeholder='example@ajou.ac.kr' />
+                <Input
+                  type="text"
+                  {...field}
+                  placeholder="example@ajou.ac.kr"
+                />
               )}
             />
           </Label>
         </FormGroup>
         <FormGroup>
-          <Label htmlFor='input_pw'>
+          <Label htmlFor="input_pw">
             Password
             <Controller
               name="input_pw"
               control={control}
               render={({ field }) => (
-                <Input type='password' {...field} placeholder='Password' />
+                <Input type="password" {...field} placeholder="Password" />
               )}
             />
           </Label>
         </FormGroup>
         <FormGroup>
-          <Button type='submit'>Login</Button>
+          <Button type="submit">Login</Button>
         </FormGroup>
       </form>
       <p style={{ fontSize: '0.8em', color: 'gray' }}>

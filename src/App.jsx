@@ -8,7 +8,6 @@ function App() {
     <Router>
       <Layout>
         <RouteList />
-
       </Layout>
     </Router>
   )
