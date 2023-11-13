@@ -3,6 +3,9 @@ import MapUI from './Map.presenter';
 import useModal from '@hooks/useModal';
 
 export default function Map() {
+  const mapRef = useRef(null);
+  const inputRef = useRef(null);
+  const [searchKeyword, setSearchKeyword] = useState('');
   const { openModal } = useModal();
 
   const modalData = {
@@ -11,50 +14,8 @@ export default function Map() {
     callBack: () => alert('ok'),
   };
 
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const mapRef = useRef(null);
-  const inputRef = useRef(null);
-  const ps = new window.kakao.maps.services.Places();
-  const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 })
-
-  let map;
-
-  const initMap = () => {
-    const container = document.getElementById('map');
-    const options = {
-      center: new window.kakao.maps.LatLng(37.27919, 127.04373),
-      level: 2,
-    };
-
-    const map = new window.kakao.maps.Map(container, options);
-    mapRef.current = map;
-
-    //search bar
-    const input = document.createElement('input');
-    container.appendChild(input);
-    const searchBtn = document.createElement('button');
-    searchBtn.addEventListener('click', () => searchPlaces());
-    container.appendChild(searchBtn);
-  };
-
-
-  const getCurrentCoordinate = async () => {
-    return new Promise((res, rej) => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-          console.log(position);
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-
-          const coordinate = new kakao.maps.LatLng(lat, lon);
-          res(coordinate);
-        });
-      } else {
-        rej(new Error("Unable to load current location."));
-      }
-    });
-  };
-
+  let ps;
+  let infowindow;
 
   const searchPlaces = async () => {
     const keyword = inputRef.current.value.trim();
@@ -66,7 +27,7 @@ export default function Map() {
       var options = {
         location: currentCoordinate,
         radius: 10000,
-        sort: kakao.maps.services.SortBy.DISTANCE,
+        sort: window.kakao.maps.services.SortBy.DISTANCE,
       };
 
       if (keyword !== '') {
@@ -76,8 +37,25 @@ export default function Map() {
       }
     } catch (error) {
       console.error(error);
-      alert('Unable to load current location.');
+      alert('Unable to load the current location.');
     }
+  };
+
+  const getCurrentCoordinate = async () => {
+    return new Promise((res, rej) => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          console.log(position);
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+
+          const coordinate = new window.kakao.maps.LatLng(lat, lon);
+          res(coordinate);
+        });
+      } else {
+        rej(new Error('Unable to load the current location.'));
+      }
+    });
   };
 
   const placesSearchCB = (data, status, pagination) => {
@@ -89,7 +67,7 @@ export default function Map() {
         bounds.extend(new window.kakao.maps.LatLng(data[i].y, data[i].x));
       }
 
-      mapRef.current.setBounds(bounds); // Use mapRef.current here
+      mapRef.current.setBounds(bounds);
     } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
       alert('No result found');
     } else if (status === window.kakao.maps.services.Status.ERROR) {
@@ -98,15 +76,14 @@ export default function Map() {
   };
 
   const displayMarker = (place) => {
-    // Create a marker and add it to the map
     const marker = new window.kakao.maps.Marker({
       map: mapRef.current,
       position: new window.kakao.maps.LatLng(place.y, place.x),
     });
 
-    kakao.maps.event.addListener(marker, 'click', function () {
+    window.kakao.maps.event.addListener(marker, 'click', function () {
       infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
-      infowindow.open(map, marker);
+      infowindow.open(mapRef.current, marker);
     });
   };
 
@@ -114,8 +91,34 @@ export default function Map() {
     const script = document.createElement('script');
     script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_KAKAOMAP_APP_KEY}&libraries=services&autoload=false`;
     document.head.appendChild(script);
-    window.kakao.maps.load(() => initMap());
-  }, [mapRef]);
+
+    script.onload = () => {
+      window.kakao.maps.load(() => {
+        const container = document.getElementById('map');
+        const options = {
+          center: new window.kakao.maps.LatLng(37.27919, 127.04373),
+          level: 2,
+        };
+        const map = new window.kakao.maps.Map(container, options);
+        mapRef.current = map;
+
+        const markerPosition = new window.kakao.maps.LatLng(37.27919, 127.04373);
+
+        const input = document.createElement('input');
+        container.appendChild(input);
+        const searchBtn = document.createElement('button');
+        searchBtn.addEventListener('click', () => searchPlaces());
+        container.appendChild(searchBtn);
+
+        infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
+        ps = new window.kakao.maps.services.Places();
+
+        const marker = new window.kakao.maps.Marker({
+          position: markerPosition,
+        });
+      });
+    };
+  }, []);
 
   return <MapUI openModal={openModal} modalData={modalData} inputRef={inputRef} searchPlaces={searchPlaces} />;
 }
