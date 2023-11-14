@@ -1,5 +1,12 @@
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
+import { createGlobalStyle } from 'styled-components';
+
+export const GlobalStyles = createGlobalStyle`
+  body {
+    font-family: 'Roboto', sans-serif;
+  }
+`;
 
 export const Navigation = styled.nav`
   display: flex;
