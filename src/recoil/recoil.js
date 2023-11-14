@@ -39,5 +39,6 @@ export const modalState = atom({
     isModalOpen: false,
     title: '',
     content: '',
+    callback: null,
   },
 });

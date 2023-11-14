@@ -1,16 +1,20 @@
 import React, { useEffect, useState, useRef } from 'react';
 import MapUI from './Map.presenter';
 import useModal from '@hooks/useModal';
+import AddPlaceSelect from '../AddPlaceSelection/AddPlaceSelect.container';
+import { useSetRecoilState } from 'recoil';
+import { userLatLong } from '@recoil/recoil';
 
 export default function Map() {
   const mapRef = useRef(null);
   const inputRef = useRef(null);
   const [searchKeyword, setSearchKeyword] = useState('');
   const { openModal } = useModal();
+  const setUserLatLong = useSetRecoilState(userLatLong);
 
   const modalData = {
     title: 'Add Place',
-    content: 'Would you like to register a place? If you register, you can leave a review of the location.',
+    content: <AddPlaceSelect />,
     callBack: () => alert('ok'),
   };
 
@@ -48,6 +52,11 @@ export default function Map() {
           console.log(position);
           const lat = position.coords.latitude;
           const lon = position.coords.longitude;
+          
+          setUserLatLong({
+            latitude: lat,
+            longitude: lon,
+          });
 
           const coordinate = new window.kakao.maps.LatLng(lat, lon);
           res(coordinate);
@@ -88,11 +97,6 @@ export default function Map() {
   };
 
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_KAKAOMAP_APP_KEY}&libraries=services&autoload=false`;
-    document.head.appendChild(script);
-
-    script.onload = () => {
       window.kakao.maps.load(() => {
         const container = document.getElementById('map');
         const options = {
@@ -101,8 +105,6 @@ export default function Map() {
         };
         const map = new window.kakao.maps.Map(container, options);
         mapRef.current = map;
-
-        const markerPosition = new window.kakao.maps.LatLng(37.27919, 127.04373);
 
         const input = document.createElement('input');
         container.appendChild(input);
@@ -117,8 +119,9 @@ export default function Map() {
           position: markerPosition,
         });
       });
-    };
-  }, []);
+
+  }, [mapRef]); // mapRef가 변경될 때마다 useEffect 실행
+
 
   return <MapUI openModal={openModal} modalData={modalData} inputRef={inputRef} searchPlaces={searchPlaces} />;
 }

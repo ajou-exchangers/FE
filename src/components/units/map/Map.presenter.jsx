@@ -26,7 +26,7 @@ export default function MapUI(props) {
       <S.SearchButton onClick={props.searchPlaces}>
       </S.SearchButton>
 
-      <div id="map" style={{ width: '100%', height: '690px' }} ref={props.mapRef}></div>
+      <div id="map" style={{ width: '100%', height: '1800px' }} ref={props.mapRef}></div>
     </S.MapContainer>
   );
 }
