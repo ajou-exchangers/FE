@@ -8,7 +8,7 @@ export default function MapUI(props) {
         +
       </S.AddPlaceButton>
       <Modal />
-      <div id="map" style={{ width: '100%', height: '1000px' }}></div>
+      <div id="map" style={{ width: '100%', height: '1800px' }}></div>
     </S.MapContainer>
   );
 }
