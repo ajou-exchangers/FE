@@ -14,6 +14,7 @@ export default defineConfig({
       { find: '@assets', replacement: '/src/assets' },
       { find: '@hooks', replacement: '/src/hooks' },
       { find: '@recoil', replacement: '/src/recoil' },
+      { find: '@public', replacement: '/public' },
     ],
   },
 });
