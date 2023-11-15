@@ -1,14 +1,12 @@
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
-import { createGlobalStyle } from 'styled-components';
-
-export const GlobalStyles = createGlobalStyle`
-  body {
-    font-family: 'Roboto', sans-serif;
-  }
-`;
 
 export const Navigation = styled.nav`
+  top: 0;
+  left: 0;
+  position: fixed;
+  width: 100%;
+  z-index: 10;
   display: flex;
   justify-content: space-between;
   align-items: center;
