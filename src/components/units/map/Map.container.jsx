@@ -2,15 +2,14 @@ import React, { useEffect, useState, useRef } from 'react';
 import MapUI from './Map.presenter';
 import useModal from '@hooks/useModal';
 import AddPlaceSelect from '../AddPlaceSelection/AddPlaceSelect.container';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { userLatLong } from '@recoil/recoil';
 
 export default function Map() {
   const mapRef = useRef(null);
   const inputRef = useRef(null);
-  const [searchKeyword, setSearchKeyword] = useState('');
   const { openModal } = useModal();
-  const setUserLatLong = useSetRecoilState(userLatLong);
+  const [userLatLng, setUserLatLong] = useRecoilState(userLatLong);
 
   const modalData = {
     title: 'Add Place',
@@ -18,65 +17,45 @@ export default function Map() {
     callBack: () => alert('ok'),
   };
 
-  let ps;
-  let infowindow;
+  navigator.geolocation.getCurrentPosition((position) => {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
 
-  const searchPlaces = async () => {
+    setUserLatLong({
+      latitude: lat,
+      longitude: lon,
+    });
+  });
+
+  const searchPlaces = () => {
     const keyword = inputRef.current.value.trim();
 
-    try {
-      const currentCoordinate = await getCurrentCoordinate();
+    const currentCoordinate = new window.kakao.maps.LatLng(
+      userLatLng.latitude,
+      userLatLng.longitude,
+    );
 
-      console.log(currentCoordinate);
-      var options = {
-        location: currentCoordinate,
-        radius: 10000,
-        sort: window.kakao.maps.services.SortBy.DISTANCE,
-      };
+    const options = {
+      location: currentCoordinate,
+      radius: 500,
+      sort: window.kakao.maps.services.SortBy.DISTANCE,
+    };
 
-      if (keyword !== '') {
-        ps.keywordSearch(keyword, placesSearchCB, options);
-      } else {
-        alert('Please enter a keyword.');
-      }
-    } catch (error) {
-      console.error(error);
-      alert('Unable to load the current location.');
+    const ps = new window.kakao.maps.services.Places();
+
+    if (keyword !== '') {
+      ps.keywordSearch(keyword, placesSearchCB, options);
+    } else {
+      alert('Please enter a keyword.');
     }
-  };
-
-  const getCurrentCoordinate = async () => {
-    return new Promise((res, rej) => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-          console.log(position);
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-          
-          setUserLatLong({
-            latitude: lat,
-            longitude: lon,
-          });
-
-          const coordinate = new window.kakao.maps.LatLng(lat, lon);
-          res(coordinate);
-        });
-      } else {
-        rej(new Error('Unable to load the current location.'));
-      }
-    });
   };
 
   const placesSearchCB = (data, status, pagination) => {
     if (status === window.kakao.maps.services.Status.OK) {
-      let bounds = new window.kakao.maps.LatLngBounds();
-
-      for (let i = 0; i < data.length; i++) {
-        displayMarker(data[i]);
-        bounds.extend(new window.kakao.maps.LatLng(data[i].y, data[i].x));
-      }
-
-      mapRef.current.setBounds(bounds);
+      displayPlaces(data);
+      // 중심 좌표 이동
+      const moveLatLon = new window.kakao.maps.LatLng(data[0].y, data[0].x);
+      mapRef.current.panTo(moveLatLon);
     } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
       alert('No result found');
     } else if (status === window.kakao.maps.services.Status.ERROR) {
@@ -84,44 +63,55 @@ export default function Map() {
     }
   };
 
-  const displayMarker = (place) => {
-    const marker = new window.kakao.maps.Marker({
-      map: mapRef.current,
-      position: new window.kakao.maps.LatLng(place.y, place.x),
-    });
+  // 지도에 마커를 표출하는 함수입니다
+  const displayPlaces = (places) => {
+    for (let i = 0; i < places.length; i++) {
+      // 마커를 생성하고 지도에 표시합니다
+      const position = new kakao.maps.LatLng(places[i].y, places[i].x);
 
-    window.kakao.maps.event.addListener(marker, 'click', function () {
-      infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
-      infowindow.open(mapRef.current, marker);
-    });
+      const marker = new kakao.maps.Marker({
+        map: mapRef.current,
+        position: position,
+      });
+
+      marker.setMap(mapRef.current);
+
+      const iwContent =
+        '<div style="padding:5px;">' + places[i].place_name + '</div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다,
+      const iwRemoveable = true;
+      const infowindow = new kakao.maps.InfoWindow({
+        content: iwContent,
+        removable: iwRemoveable,
+      });
+
+      // 마커와 검색결과 항목을 클릭 했을 때 장소정보를 표출
+      ((marker, place) => {
+        kakao.maps.event.addListener(marker, 'click', () => {
+          infowindow.open(mapRef.current, marker);
+        });
+      })(marker, places[i]);
+    }
   };
 
   useEffect(() => {
-      window.kakao.maps.load(() => {
-        const container = document.getElementById('map');
-        const options = {
-          center: new window.kakao.maps.LatLng(37.27919, 127.04373),
-          level: 2,
-        };
-        const map = new window.kakao.maps.Map(container, options);
-        mapRef.current = map;
-
-        const input = document.createElement('input');
-        container.appendChild(input);
-        const searchBtn = document.createElement('button');
-        searchBtn.addEventListener('click', () => searchPlaces());
-        container.appendChild(searchBtn);
-
-        infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
-        ps = new window.kakao.maps.services.Places();
-
-        const marker = new window.kakao.maps.Marker({
-          position: markerPosition,
-        });
-      });
-
+    window.kakao.maps.load(() => {
+      const container = document.getElementById('map');
+      const options = {
+        center: new window.kakao.maps.LatLng(37.27919, 127.04373),
+        level: 2,
+      };
+      // 기본 좌표 아주대
+      const map = new window.kakao.maps.Map(container, options);
+      mapRef.current = map;
+    });
   }, [mapRef]); // mapRef가 변경될 때마다 useEffect 실행
 
-
-  return <MapUI openModal={openModal} modalData={modalData} inputRef={inputRef} searchPlaces={searchPlaces} />;
+  return (
+    <MapUI
+      openModal={openModal}
+      modalData={modalData}
+      inputRef={inputRef}
+      searchPlaces={searchPlaces}
+    />
+  );
 }

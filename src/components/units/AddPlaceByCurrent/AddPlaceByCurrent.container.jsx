@@ -63,7 +63,7 @@ export default function AddPlaceByCurrent() {
 
   // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
   const addMarker = (position, order) => {
-    const imageSrc = '/public/images/mapMarker.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+    const imageSrc = '/images/mapMarker.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
       imageSize = new kakao.maps.Size(36, 36), // 마커 이미지의 크기
       markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize),
       marker = new kakao.maps.Marker({
