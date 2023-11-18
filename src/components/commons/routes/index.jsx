@@ -3,8 +3,11 @@ import { Route, Routes } from 'react-router-dom';
 import MainPage from '@pages/main';
 import LoginPage from '@pages/login';
 import SignupPage from '@pages/signup';
-import Boards from '@pages/boards';
+import Board from '@pages/board';
 import MapPage from '../../../pages/map';
+import MyPage from '@pages/mypage';
+import WritePostPage from '@pages/board/WritePost.jsx';
+import ViewPostPage from '@pages/board/ViewPost.jsx';
 
 export default function RouteList() {
   return (
@@ -12,9 +15,11 @@ export default function RouteList() {
       <Route exact path="/" element={<MainPage />} />
       <Route exact path="/login" element={<LoginPage />} />
       <Route exact path="/signup" element={<SignupPage />} />
-      <Route path="/boards" element={<Boards />} />
+      <Route path="/board" element={<Board />} />
       <Route path="/map" element={<MapPage />} />
-      <Route path="/myPage" element={<div>마이페이지</div>} />
+      <Route path="/mypage" element={<MyPage />} />
+      <Route path="/write-post" element={<WritePostPage />} />
+      <Route path="/view-post/:id" element={<ViewPostPage />} />
     </Routes>
   );
 }

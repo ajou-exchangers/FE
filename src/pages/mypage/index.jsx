@@ -60,15 +60,25 @@ const Button = styled.button`
   border: none;
   padding: 15px 10px;
   cursor: pointer;
-  background-image: url("./pen-solid.svg");
+
   background-repeat: no-repeat;
   margin-top: 5px;
   background-position: center;
   background-color: white;
 `;
 
+const EditableInput = styled.input`
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+`;
+
 const MyPage = ({ userId }) => {
   const [selectedTab, setSelectedTab] = useState('profile');
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedUser, setEditedUser] = useState({});
   const dummyUserData = {
     userId: 'davin',
     email: 'davin@naver.com',
@@ -80,6 +90,7 @@ const MyPage = ({ userId }) => {
 
   useEffect(() => {
     setUser(dummyUserData);
+    setEditedUser(dummyUserData);
   }, [userId]);
 
   const handleTabChange = (tab) => {
@@ -87,7 +98,21 @@ const MyPage = ({ userId }) => {
   };
 
   const handleEditProfile = () => {
-    //
+    setIsEditing(true);
+  };
+
+  const handleSaveChanges = () => {
+    setUser(editedUser);
+    setIsEditing(false);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedUser((prev) => ({ ...prev, [name]: value }));
   };
 
   const renderContent = () => {
@@ -95,25 +120,57 @@ const MyPage = ({ userId }) => {
       case 'profile':
         return (
           <div>
-            <h2>My Profile <Button onClick={handleEditProfile}></Button></h2>
+            <h2>
+              My Profile
+              {isEditing ? (
+                <>
+                  <Button onClick={handleSaveChanges}>Save</Button>
+                  <Button onClick={handleCancelEdit}>Cancel</Button>
+                </>
+              ) : (
+                <Button onClick={handleEditProfile}>Edit</Button>
+              )}
+            </h2>
             {user && (
               <div>
-                <ProfileImage src={user.profilePicture} alt="Profile" />
-                <UserInfo>
-                  <Label>Email</Label>
-                  <Value>{user.email}</Value>
-                </UserInfo>
+                {isEditing ? (
+                  <div>
+                    <ProfileImage src={editedUser.profilePicture} alt="Profile" />
+                    <EditableInput
+                      type="text"
+                      name="nickname"
+                      value={editedUser.nickname}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <ProfileImage src={user.profilePicture} alt="Profile" />
+                    <UserInfo>
+                      <Label>Email</Label>
+                      <Value>{user.email}</Value>
+                    </UserInfo>
 
-                <UserInfo>
-                  <Label>Nickname</Label>
-                  <Value>{user.nickname}</Value>
-                </UserInfo>
+                    <UserInfo>
+                      <Label>Nickname</Label>
+                      {isEditing ? (
+                        <EditableInput
+                          type="text"
+                          name="nickname"
+                          value={editedUser.nickname}
+                          onChange={handleInputChange}
+                        />
+                      ) : (
+                        <Value>{user.nickname}</Value>
+                      )}
+                    </UserInfo>
 
-                <UserInfo>
-                  <Label>Campus</Label>
-                  <Value>Ajou Univ</Value>
-                </UserInfo>
-
+                    <UserInfo>
+                      <Label>Campus</Label>
+                      <Value>Ajou Univ</Value>
+                    </UserInfo>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -122,20 +179,19 @@ const MyPage = ({ userId }) => {
         return (
           <div>
             <h2>My Posts</h2>
-
           </div>
         );
       case 'comments':
         return (
           <div>
             <h2>My Comments</h2>
-
           </div>
         );
       default:
         return null;
     }
   };
+
 
   return (
     <>
