@@ -5,19 +5,9 @@ export const userLatLong = atom({
   default: { latitude: 37.27919, longitude: 127.04373 },
 });
 
-export const isAddPlaceModalOpen = atom({
-  key: 'isAddPlaceModalOpen',
-  default: false,
-});
-
 // login
 export const loginState = atom({
   key: 'loginState',
-  default: false,
-});
-
-export const isLoginModalOpen = atom({
-  key: 'isLoginModalOpen',
   default: false,
 });
 
@@ -39,6 +29,5 @@ export const modalState = atom({
     isModalOpen: false,
     title: '',
     content: '',
-    callback: null,
   },
 });

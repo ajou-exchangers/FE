@@ -24,7 +24,6 @@ export default function useModal() {
         isModalOpen: true,
         title,
         content,
-        callback,
       }),
     [setModalDataState],
   );
