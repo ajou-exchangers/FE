@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import MapUI from './Map.presenter';
 import useModal from '@hooks/useModal';
-import AddPlaceSelect from '../AddPlaceSelection/AddPlaceSelect.container';
+import AddPlaceSelect from '../AddPlaceSelect/AddPlaceSelect.container';
 import { useRecoilState } from 'recoil';
 import { userLatLong } from '@recoil/recoil';
 
@@ -14,7 +14,6 @@ export default function Map() {
   const modalData = {
     title: 'Add Place',
     content: <AddPlaceSelect />,
-    callBack: () => alert('ok'),
   };
 
   navigator.geolocation.getCurrentPosition((position) => {
