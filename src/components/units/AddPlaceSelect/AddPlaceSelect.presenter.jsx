@@ -1,18 +1,17 @@
 import * as S from './AddPlaceSelect.styles';
-import Modal from '../../commons/modal/Modal';
 
 export default function AddPlaceSelectUI(props) {
   return (
     <S.ButtonWrapper>
       <S.SelectButton onClick={() => props.onClickButton(1)}>
-        Use current location
+        Add Place By Kakao API
       </S.SelectButton>
       <S.SelectButton onClick={() => props.onClickButton(2)}>
-        Use pin on the map
+        Add Place By Yourself
       </S.SelectButton>
-      <S.SelectButton onClick={() => props.onClickButton(3)}>
-        Place near campus
-      </S.SelectButton>
+      <S.SmallDescription>
+        If you can't search your place on KakaoMap
+      </S.SmallDescription>
     </S.ButtonWrapper>
   );
 }

@@ -34,25 +34,41 @@ export const ModalTitle = styled.div`
 
 export const ModalContents = styled.div`
   padding: 1rem;
-  border-bottom: 1px solid #cbcbcb;
-`;
-export const ModalFooter = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-export const ModalButton = styled.button`
-  background: none;
-  border: none;
-  width: 100%;
-  height: 52px;
-  font-weight: bold;
-  :hover {
-    opacity: 50%;
+
+  //scroll
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #cbcbcb;
+    border-radius: 20px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #c1c1c1;
     transition: 0.5s;
-    cursor: pointer;
+  }
+
+  &::-webkit-scrollbar-thumb:active {
+    background-color: #c1c1c1;
   }
 `;
 
-export const ModalButtonWithBorder = styled(ModalButton)`
-  border-right: 1px solid #cbcbcb;
-`;
+// export const ModalButton = styled.button`
+//   background: none;
+//   border: none;
+//   width: 100%;
+//   height: 52px;
+//   font-weight: bold;
+//   :hover {
+//     opacity: 50%;
+//     transition: 0.5s;
+//     cursor: pointer;
+//   }
+// `;
+
+// export const ModalButtonWithBorder = styled(ModalButton)`
+//   border-right: 1px solid #cbcbcb;
+// `;

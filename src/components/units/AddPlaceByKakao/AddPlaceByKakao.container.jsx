@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { userLatLong } from '@recoil/recoil';
 import { useRecoilValue } from 'recoil';
-import AddPlaceByCurrentUI from './AddPlaceByCurrent.presenter';
+import AddPlaceByKakaoUI from './AddPlaceByKakao.presenter';
+import AddPlaceForm from '../addPlaceForm/AddPlaceForm.container';
 
-export default function AddPlaceByCurrent() {
+export default function AddPlaceByKakao() {
   const mapModalRef = useRef(null);
   const userLatLongValue = useRecoilValue(userLatLong);
   const [map, setMap] = useState(null);
@@ -12,6 +13,9 @@ export default function AddPlaceByCurrent() {
   const [ps, setPs] = useState(null);
   const [markers, setMarkers] = useState([]); // 마커를 담을 배열입니다
   const [contentNode, setContentNode] = useState(null); // 커스텀 오버레이의 컨텐츠 노드
+  const [placeName, setPlaceName] = useState(''); // 장소명
+  const [placeAddress, setPlaceAddress] = useState(''); // 장소 주소
+  const [placeLatLng, setPlaceLatLng] = useState({}); // 장소 위도, 경도
 
   // 카테고리 검색을 요청하는 함수입니다
   const searchPlaces = (map, ps, placeOverlay, removeMarker, currCategory) => {
@@ -56,6 +60,12 @@ export default function AddPlaceByCurrent() {
       ((marker, place) => {
         kakao.maps.event.addListener(marker, 'click', () => {
           displayPlaceInfo(place);
+          setPlaceName(place.place_name);
+          setPlaceAddress(place.address_name);
+          setPlaceLatLng({
+            latitude: place.y,
+            longitude: place.x,
+          });
         });
       })(marker, places[i]);
     }
@@ -79,11 +89,13 @@ export default function AddPlaceByCurrent() {
 
   // 클릭한 마커에 대한 장소 상세정보를 커스텀 오버레이로 표시하는 함수입니다
   function displayPlaceInfo(place) {
-    var content = `
+    // 이름을 누르면 이름을 복사할 수 있도록 한다.
+    const content = `
           <div style="padding:5px; background-color: white; border-radius: 5px;
-              <a href="${place.place_url}" target="_blank" title="${place.place_name}">
+          border: 1px solid #ccc; font-size: 12px; font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;">
+              <div style="padding: 5px 0 5px 0; font-weight: bold;">
                   ${place.place_name}
-              </a>
+              </div>
               <div title="${place.road_address_name}">
                   ${place.road_address_name}
               </div>
@@ -110,7 +122,7 @@ export default function AddPlaceByCurrent() {
         userLatLongValue.latitude,
         userLatLongValue.longitude,
       ),
-      level: 1,
+      level: 2,
     };
 
     const map = new window.kakao.maps.Map(container, options);
@@ -183,9 +195,17 @@ export default function AddPlaceByCurrent() {
   }, [currCategory]);
 
   return (
-    <AddPlaceByCurrentUI
-      onClickCategory={onClickCategory}
-      currCategory={currCategory}
-    />
+    <>
+      <AddPlaceByKakaoUI
+        onClickCategory={onClickCategory}
+        currCategory={currCategory}
+      />
+      <AddPlaceForm
+        placeName={placeName}
+        placeAddress={placeAddress}
+        currCategory={currCategory}
+        placeLatLng={placeLatLng}
+      />
+    </>
   );
 }

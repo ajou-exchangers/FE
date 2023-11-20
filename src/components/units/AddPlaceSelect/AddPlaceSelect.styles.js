@@ -19,8 +19,8 @@ export const ButtonWrapper = styled.div`
 `;
 
 export const SelectButton = styled.button`
-  width: 18rem;
-  height: 5rem;
+  width: 20rem;
+  height: 6rem;
   border-radius: 12px;
   background-color: ${({ selected }) => (selected ? '#fff' : '#6d5c98')};
   color: ${({ selected }) => (selected ? '#6d5c98' : '#fff')};
@@ -36,4 +36,10 @@ export const SelectButton = styled.button`
   :hover {
     animation: ${hoverAnimation} 0.3s forwards;
   }
+`;
+
+export const SmallDescription = styled.span`
+  font-size: 0.9rem;
+  color: gray;
+  margin-bottom: 25px;
 `;

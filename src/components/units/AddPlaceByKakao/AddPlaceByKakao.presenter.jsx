@@ -1,13 +1,13 @@
-import * as S from './AddPlaceByCurrent.styles';
+import * as S from './AddPlaceByKakao.styles';
 
-export default function AddPlaceByCurrentUI(props) {
+export default function AddPlaceByKakaoUI(props) {
   return (
     <div className="map_wrap">
       <div
         id="mapModal"
         style={{
           width: '600px',
-          height: '450px',
+          height: '400px',
           position: 'relative',
           overflow: 'hidden',
         }}
