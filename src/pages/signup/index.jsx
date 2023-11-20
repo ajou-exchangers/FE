@@ -95,13 +95,7 @@ const SignupPage = () => {
 
   return (
     <FormContainer>
-      <img
-        src="globe-americas-solid.svg"
-        width="70"
-        height="70"
-        alt="Logo"
-        className="input-icon"
-      />
+
       <h1>Sign up</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormGroup>

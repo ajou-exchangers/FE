@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import styled from '@emotion/styled';
+import axios from 'axios';
 
 const FormContainer = styled.div`
   text-align: center;
@@ -68,9 +69,15 @@ const LinkStyled = styled.a`
 export default function LoginPage() {
   const { handleSubmit, control } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post('/auth/signin', data);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Login failed:', error.message);
+    }
   };
+  
 
   return (
     <FormContainer>
