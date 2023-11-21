@@ -1,11 +1,10 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 const ViewPostPageWrapper = styled.div`
   max-width: 800px;
   margin: 0 auto;
   margin-top: 20px;
-  
 `;
 
 const PostContentWrapper = styled.div`
