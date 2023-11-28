@@ -17,26 +17,25 @@ export default function AddPlaceForm(props) {
       kioskAvailable: data.hasKiosk,
       parkingAvailable: data.hasParking,
       englishSpeaking: data.englishAvailable,
-      restroomAvailable: data.hasRestroom,
+      wifiAvailable: data.wifiAvailable,
       description: data.placeDescription,
       category: codeToCategory(props.currCategory),
-      image: selectedFile,
+      // image: selectedFile,
+      image: 'tempFile',
       latitude: props.placeLatLng.latitude,
       longitude: props.placeLatLng.longitude,
     };
     alert(JSON.stringify(msgBody));
 
-    // fetch('http://43.200.181.183:8000/locations', {
-    //   method: 'POST',
-    //   body: JSON.stringify(msgBody),
-    // }).then((res) => {
-    //   if (res.ok) {
-    //     alert('Successfully added!');
-    //     window.location.reload();
-    //   } else {
-    //     alert('Failed to add');
-    //   }
-    // });
+    fetch('http://43.200.181.183:8000/locations', {
+      method: 'POST',
+      body: JSON.stringify(msgBody),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .catch((err) => console.error(err));
   };
 
   const codeToCategory = (category) => {
