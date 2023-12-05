@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import styled from '@emotion/styled';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const FormContainer = styled.div`
   text-align: center;
@@ -66,28 +67,50 @@ const LinkStyled = styled.a`
   }
 `;
 
+const ErrorMessage = styled.p`
+  color: red;
+  margin-top: 10px;
+`;
+
+const SuccessMessage = styled.p`
+  color: green;
+  margin-top: 10px;
+`;
+
 export default function LoginPage() {
-  const { handleSubmit, control } = useForm();
+  const { handleSubmit, control } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const [loginError, setLoginError] = useState('');
+  const [loginSuccess, setLoginSuccess] = useState(false);
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post('/auth/signin', data);
-      console.log(response.data);
+      const response = await axios.post('http://15.165.42.212:3000/api/exchangers/v1/auth/signin', {
+        email: data.email,
+        password: data.password,
+      });
+      console.log('Login response:', response.data);
+      alert('Signin successful!');
+      navigate('/map');
     } catch (error) {
-      console.error('Login failed:', error.message);
+      setLoginError('Invalid email or password. Please try again.');
     }
   };
-  
 
   return (
     <FormContainer>
       <h1>LOGIN</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormGroup>
-          <Label htmlFor="input_id">
-            Email
+          <Label htmlFor="email">
             <Controller
-              name="input_id"
+              name="email"
               control={control}
               render={({ field }) => (
                 <Input
@@ -100,10 +123,9 @@ export default function LoginPage() {
           </Label>
         </FormGroup>
         <FormGroup>
-          <Label htmlFor="input_pw">
-            Password
+          <Label htmlFor="password">
             <Controller
-              name="input_pw"
+              name="password"
               control={control}
               render={({ field }) => (
                 <Input type="password" {...field} placeholder="Password" />
@@ -115,6 +137,8 @@ export default function LoginPage() {
           <Button type="submit">Login</Button>
         </FormGroup>
       </form>
+      {loginError && <ErrorMessage>{loginError}</ErrorMessage>}
+      {loginSuccess && <SuccessMessage>Login successful!</SuccessMessage>}
       <p style={{ fontSize: '0.8em', color: 'gray' }}>
         Don't have an account? <LinkStyled href="/signup">Sign up</LinkStyled>
       </p>
