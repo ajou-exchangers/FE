@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
+import axios from 'axios';
 
 const Container = styled.div`
   max-width: 800px;
@@ -41,8 +42,8 @@ const FileInputContainer = styled.label`
   background-size: 30px;
   background-position: center;
   background-repeat: no-repeat;
-  height: 20px;
-  width: 20px;
+  height: 35px;
+  width: 50px;
   cursor: pointer;
   margin-bottom: 16px;
   padding: 10px 15px;
@@ -93,7 +94,6 @@ const WritePostPage = ({ onAddPost }) => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    // image preview
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -104,14 +104,23 @@ const WritePostPage = ({ onAddPost }) => {
     setNewPost((prevPost) => ({ ...prevPost, image: file }));
   };
 
-  const handleAddPost = () => {
+  const handleAddPost = async () => {
     if (newPost.title && newPost.content && newPost.image) {
-      onAddPost(newPost);
-      setNewPost({ title: '', content: '', image: null });
-      setImagePreview(null);
+      try {
+        const formData = new FormData();
+        formData.append('title', newPost.title);
+        formData.append('content', newPost.content);
+        formData.append('image', newPost.image);
 
-      // board로 다시??
-      navigate('/board');
+        await axios.post('http://15.165.42.212:3000/api/exchangers/v1/board', formData);
+
+        setNewPost({ title: '', content: '', image: null });
+        setImagePreview(null);
+
+        navigate('/board');
+      } catch (error) {
+        console.error('Error adding post:', error);
+      }
     }
   };
 
