@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Global, css } from '@emotion/react';
 import styled from '@emotion/styled';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -109,19 +111,32 @@ const MyPage = ({ userId }) => {
   const [selectedTab, setSelectedTab] = useState('profile');
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({});
-  const dummyUserData = {
-    userId: 'davin',
-    email: 'davin@naver.com',
-    nickname: 'davini',
-    profilePicture: '/lock-solid.svg',
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://15.165.42.212:3000/api/exchangers/v1/auth/signout');
+      console.log('Logout successful');
+    } catch (error) {
+      console.error('Logout failed', error.message);
+    }
   };
 
-  const [user, setUser] = useState(null);
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //       const response = await axios.get('http://15.165.42.212:3000/api/exchangers/v1/auth/user');
+  //       setUser(response.data);
+  //       setEditedUser(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching user data:', error.message);
+  //       navigate('/login');
+  //     }
+  //   };
 
-  useEffect(() => {
-    setUser(dummyUserData);
-    setEditedUser(dummyUserData);
-  }, [userId]);
+  //   fetchUserData();
+  // }, [navigate]);
 
   const handleTabChange = (tab) => {
     setSelectedTab(tab);
@@ -243,7 +258,7 @@ const MyPage = ({ userId }) => {
           <NavLink href="#" onClick={() => handleTabChange('profile')}>My Profile</NavLink>
           <NavLink href="#" onClick={() => handleTabChange('posts')}>My Posts</NavLink>
           <NavLink href="#" onClick={() => handleTabChange('comments')}>My Comments</NavLink>
-          <Button type="logout">LOGOUT</Button>
+          <Button onClick={handleLogout}>LOGOUT</Button>
         </LeftNavbar>
         <ContentContainer>{renderContent()}</ContentContainer>
       </Container>
