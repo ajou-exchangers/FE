@@ -74,6 +74,7 @@ const ResultMessage = styled.p`
 `;
 
 
+
 const SignupPage = () => {
   const { handleSubmit, control, watch, setError, formState: { errors } } = useForm({
     defaultValues: {
@@ -86,6 +87,19 @@ const SignupPage = () => {
 
   const [isPasswordValid, setPasswordValid] = useState(true);
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({ profileImage: null, profileImagePreview: null, });
+
+  const handleInputChange = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      setFormData({
+        ...formData,
+        profileImage: file,
+        profileImagePreview: URL.createObjectURL(file),
+      });
+    }
+  };
 
   const password = watch('password');
   const confirmPassword = watch('confirmPassword');
@@ -107,24 +121,23 @@ const SignupPage = () => {
   const onSubmit = async (data) => {
     try {
       console.log(data);
+
       if (!isPasswordValid || !validateEmail(data.email)) {
         console.error('Invalid input. Please check the form fields.');
         return;
       }
-      const response = await axios.get(`http://15.165.42.212:3000/api/exchangers/v1/auth/${data.nickname}`);
-      const isNicknameAvailable = response.data.available;
 
-      if (!isNicknameAvailable) {
-        console.error('Nickname is not available. Please choose a different one.');
-        return;
-      }
+      const formData = new FormData();
+      formData.append('email', data.email);
+      formData.append('password', data.password);
+      formData.append('confirmPassword', data.confirmPassword);
+      formData.append('nickname', data.nickname);
+      formData.append('profileImage', data.profileImage);
 
-      const signupResponse = await axios.post('http://15.165.42.212:3000/api/exchangers/v1/auth/signup', {
-        email: data.email,
-        password: data.password,
-        confirmPassword: data.confirmPassword,
-        nickname: data.nickname,
-      });
+      const signupResponse = await axios.post(
+        'http://15.165.42.212:3000/api/exchangers/v1/auth/signup',
+        formData
+      );
       alert('Signup successful!');
       navigate('/');
     } catch (error) {
@@ -132,21 +145,28 @@ const SignupPage = () => {
     }
   };
 
-
   const [nicknameAvailability, setNicknameAvailability] = useState(null);
 
   const handleNicknameAvailabilityCheck = async () => {
     const nickname = watch('nickname');
+    console.log(nickname);
 
     try {
-      const response = await axios.get(`http://example.com/check-nickname?nickname=${nickname}`);
-      const isAvailable = response.data.available;
-      setNicknameAvailability(isAvailable);
+      setNicknameAvailability(null);
+      const response = await axios.get(`http://15.165.42.212:3000/api/exchangers/v1/auth/check-nickname/${nickname}`);
+      console.log('Response:', response);
+
+      if (response.status === 200) {
+        setNicknameAvailability(true);
+        setError('nickname', {})
+      } else {
+        setNicknameAvailability(false);
+        setError('nickname', { type: 'manual', message: 'Nickname is not available.' });
+      }
     } catch (error) {
-      console.error('Error checking nickname availability:', error.message);
+      setNicknameAvailability(false);
     }
   };
-
 
   return (
     <FormContainer>
@@ -258,23 +278,14 @@ const SignupPage = () => {
 
           {nicknameAvailability !== null && (
             <ResultMessage success={nicknameAvailability}>
-              {nicknameAvailability ? 'Nickname is available!' : 'Nickname is already taken!'}
+              {nicknameAvailability
+                ? 'Nice Nickname :)'
+                : `Already existing nickname :(`}
             </ResultMessage>
           )}
         </FormGroup>
-        <Button type="submit">Create an Account</Button>
-      </form>
-      <p style={{ fontSize: '0.8em', color: 'gray' }}>
-        Already have an account? <LinkStyled to="/login">Login</LinkStyled>
-      </p>
-    </FormContainer>
-  );
-};
 
-export default SignupPage;
-
-
-{/* <FormGroup>
+        <FormGroup>
           <Label className="input-file-button" htmlFor="input-file">
             <img
               src="image-regular.svg"
@@ -306,4 +317,16 @@ export default SignupPage;
               width="250"
               height="250"
             />
-          </FormGroup> */}
+          </FormGroup>
+        )}
+
+        <Button type="submit">Create an Account</Button>
+      </form>
+      <p style={{ fontSize: '0.8em', color: 'gray' }}>
+        Already have an account? <LinkStyled to="/login">Login</LinkStyled>
+      </p>
+    </FormContainer>
+  );
+};
+
+export default SignupPage;
