@@ -4,6 +4,8 @@ import styled from '@emotion/styled';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+axios.defaults.withCredentials = true;
+
 const FormContainer = styled.div`
   text-align: center;
 `;
@@ -94,6 +96,8 @@ export default function LoginPage() {
       const response = await axios.post('http://15.165.42.212:3000/api/exchangers/v1/auth/signin', {
         email: data.email,
         password: data.password,
+      }, {
+        withCredentials: true
       });
       console.log('Login response:', response.data);
       alert('Signin successful!');
