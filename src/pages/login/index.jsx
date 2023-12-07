@@ -92,17 +92,19 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
+    
     try {
-      const response = await axios.post('http://15.165.42.212:3000/api/exchangers/v1/auth/signin', {
+      const response = await axios.post('https://exchangers.site/api/exchangers/v1/auth/signin', {
         email: data.email,
         password: data.password,
       }, {
-        withCredentials: true
+        withCredentials: true,
       });
       console.log('Login response:', response.data);
       alert('Signin successful!');
       navigate('/map');
     } catch (error) {
+      console.error('Error:', error.response.data);
       setLoginError('Invalid email or password. Please try again.');
     }
   };
