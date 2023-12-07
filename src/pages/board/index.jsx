@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const BoardContainer = styled.div`
   display: flex;
@@ -89,7 +90,7 @@ const Author = styled.span`
   margin-right: 10px;
 `;
 
-const Date = styled.span`
+const Dates = styled.span`
   color: #555;
 `;
 
@@ -123,24 +124,30 @@ const ArrowButton = styled.button`
 
 
 const Board = () => {
-  const [posts, setPosts] = useState([
-    { id: 1, title: 'Post 1', content: 'Hello', author: 'Author1', date: '2023-01-01' },
-    { id: 2, title: 'Post 2', content: 'hihihihi', author: 'Author2', date: '2023-01-01' },
-    { id: 3, title: 'Post 3', content: 'ㅇㅇㅇi', author: 'Author1', date: '2023-01-01' },
-    { id: 4, title: 'Post 4', content: 'ㅑㅑㅑ', author: 'Author3', date: '2023-01-01' },
-    { id: 5, title: 'Post 5', content: 'ㅑㅑㅑ', author: 'Author4', date: '2023-01-01' },
-    { id: 6, title: 'Post 6', content: '222', author: 'Author5', date: '2023-01-01' },
-  ]);
-
+  const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 5;
+
+  // Calculate total pages
   const totalPages = Math.ceil(posts.length / postsPerPage);
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get('https://exchangers.site/api/exchangers/v1/board');
+        console.log('Response:', response.data);
+        setPosts(response.data);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
+    fetchPosts();
+  }, []);
 
   return (
     <BoardContainer>
@@ -151,14 +158,14 @@ const Board = () => {
 
       <PostList>
         {currentPosts.map((post) => (
-          <Link key={post.id} to={{ pathname: `/view-post/${post.id}`, state: { post } }}>
+          <Link key={post._id} to={{ pathname: `/board/${post._id}`, state: { post } }}>
             <PostListItem>
-              <PostTitle>{post.title} 🖼️</PostTitle>
+              <PostTitle>{post.title} {post.imageUrl && '🖼️'} </PostTitle>
               <PostInfo>
-                <LikeCount>💜</LikeCount>
-                <CommentCount>🗒️</CommentCount>
-                <Author>{post.author}</Author>
-                <Date>{post.date}</Date>
+                <LikeCount>💜 {post.likes}</LikeCount>
+                <CommentCount>🗒️ {post.comments}</CommentCount>
+                <Author>{post.author.nickname}</Author>
+                <Dates>{new Date(post.createdAt).toLocaleString()}</Dates>
               </PostInfo>
             </PostListItem>
           </Link>
