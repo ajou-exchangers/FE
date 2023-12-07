@@ -134,10 +134,7 @@ const SignupPage = () => {
       formData.append('nickname', data.nickname);
       formData.append('profileImage', data.profileImage);
 
-      const signupResponse = await axios.post(
-        'http://15.165.42.212:3000/api/exchangers/v1/auth/signup',
-        formData
-      );
+      const signupResponse = await axios.post('https://exchangers.site/api/exchangers/v1/auth/signup', formData);
       alert('Signup successful!');
       navigate('/');
     } catch (error) {
@@ -153,7 +150,7 @@ const SignupPage = () => {
 
     try {
       setNicknameAvailability(null);
-      const response = await axios.get(`http://15.165.42.212:3000/api/exchangers/v1/auth/check-nickname/${nickname}`);
+      const response = await axios.get(`https://exchangers.site/api/exchangers/v1/auth/check-nickname/${nickname}`);
       console.log('Response:', response);
 
       if (response.status === 200) {
