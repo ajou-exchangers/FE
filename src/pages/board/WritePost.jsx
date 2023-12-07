@@ -38,7 +38,7 @@ const Content = styled.input`
 const FileInputContainer = styled.label`
   position: relative;
   display: inline-block;
-  background-image: url("./image-add-button_icon-icons.com_71462.png");
+  background-image: url("/image-add-button_icon-icons.com_71462.png");
   background-size: 30px;
   background-position: center;
   background-repeat: no-repeat;
@@ -56,8 +56,8 @@ const HiddenFileInput = styled.input`
 `;
 
 const ImagePreview = styled.img`
-  width: 200px;
-  height: 200px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
   margin-bottom: 16px;
   border: 1px solid #ddd;
@@ -105,29 +105,27 @@ const WritePostPage = ({ onAddPost }) => {
   };
 
   const handleAddPost = async () => {
-    if (newPost.title && newPost.content && newPost.image) {
-      try {
-        const formData = new FormData();
-        formData.append('title', newPost.title);
-        formData.append('content', newPost.content);
-        formData.append('image', newPost.image);
+    try {
+      const formData = new FormData();
+      formData.append('title', newPost.title);
+      formData.append('content', newPost.content);
+      formData.append('image', newPost.image);
 
-        await axios.post('http://15.165.42.212:3000/api/exchangers/v1/board', formData);
+      await axios.post('https://exchangers.site/api/exchangers/v1/board', formData);
 
-        setNewPost({ title: '', content: '', image: null });
-        setImagePreview(null);
+      setNewPost({ title: '', content: '', image: null });
+      setImagePreview(null);
 
-        navigate('/board');
-      } catch (error) {
-        console.error('Error adding post:', error);
-      }
+      navigate('/board');
+    } catch (error) {
+      console.error('Error adding post:', error.response);
     }
   };
 
   return (
     <Container>
       <h2>Write a New Post</h2>
-      <Form onSubmit={handleAddPost}>
+      <Form>
         <PostTitle
           name="title"
           placeholder="Title"
@@ -146,13 +144,10 @@ const WritePostPage = ({ onAddPost }) => {
             accept="image/*"
             onChange={handleImageChange}
           />
-          <img src=""></img>
-        </FileInputContainer>
-        {imagePreview && <ImagePreview src={imagePreview} alt="Image Preview" />}
 
-        <Button type="submit">
-          Add Post
-        </Button>
+        </FileInputContainer>
+        {imagePreview && <ImagePreview src={imagePreview} />}
+        <Button type="button" onClick={handleAddPost}>Add Post</Button>
       </Form>
     </Container>
   );
