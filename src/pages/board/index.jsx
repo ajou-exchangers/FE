@@ -126,34 +126,44 @@ const ArrowButton = styled.button`
 const Board = () => {
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showAddButton, setShowAddButton] = useState(false);
+
   const postsPerPage = 5;
-
-  // Calculate total pages
   const totalPages = Math.ceil(posts.length / postsPerPage);
-
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+
+  const checkLoginStatus = async () => {
+    try {
+      const response = await axios.get('https://exchangers.site/api/exchangers/v1/user/me');
+      setShowAddButton(response.status === 200);
+    } catch (error) {
+      setShowAddButton(false);
+    }
+  };
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get('https://exchangers.site/api/exchangers/v1/board');
-        console.log('Response:', response.data);
-        setPosts(response.data);
+        setPosts(response.data.posts);
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error('Error:', error);
       }
     };
     fetchPosts();
   }, []);
 
+  useEffect(() => { checkLoginStatus(); }, []);
+
   return (
     <BoardContainer>
       <HeaderContainer>
         <h2>Board</h2>
-        <AddButton to="/write-post">Add Post</AddButton>
+        {showAddButton && <AddButton to="/write-post">Add Post</AddButton>}
       </HeaderContainer>
 
       <PostList>
@@ -174,9 +184,7 @@ const Board = () => {
 
       <Pagination>
         <ArrowButton onClick={() => paginate(1)}>{'◀'}</ArrowButton>
-        {Array.from({ length: totalPages }).map((_, index) => (
-          <button key={index + 1} onClick={() => paginate(index + 1)}>{index + 1}</button>
-        ))}
+        {Array.from({ length: totalPages }).map((_, index) => (<button key={index + 1} onClick={() => paginate(index + 1)}>{index + 1}</button>))}
         <ArrowButton onClick={() => paginate(totalPages)}>{'▶'}</ArrowButton>
       </Pagination>
     </BoardContainer>
