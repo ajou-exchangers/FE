@@ -15,12 +15,16 @@ export const userInfo = atom({
   key: 'userInfo',
   default: {
     email: '',
-    createdAt: '',
     nickname: '',
-    updatedAt: '',
-    profileImage: '',
   },
 });
+
+export const updateUserInfo = selector({
+  key: 'updateUserInfo',
+  get: ({ get }) => get(userInfo),
+  set: ({ set }, newUserInfo) => set(userInfo, newUserInfo),
+});
+
 
 // 전역 모달 상태
 export const modalState = atom({
