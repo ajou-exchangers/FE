@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 const BoardContainer = styled.div`
   display: flex;
@@ -57,10 +57,10 @@ const PostListItem = styled.li`
 `;
 
 const PostInfo = styled.div`
-display: flex;
-align-items: center;
-margin-left: auto;
-font-size: 10px;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  font-size: 10px;
 `;
 
 const PostTitle = styled.strong`
@@ -121,15 +121,50 @@ const ArrowButton = styled.button`
   transition: background-color 0.3s ease;
 `;
 
-
 const Board = () => {
   const [posts, setPosts] = useState([
-    { id: 1, title: 'Post 1', content: 'Hello', author: 'Author1', date: '2023-01-01' },
-    { id: 2, title: 'Post 2', content: 'hihihihi', author: 'Author2', date: '2023-01-01' },
-    { id: 3, title: 'Post 3', content: 'ㅇㅇㅇi', author: 'Author1', date: '2023-01-01' },
-    { id: 4, title: 'Post 4', content: 'ㅑㅑㅑ', author: 'Author3', date: '2023-01-01' },
-    { id: 5, title: 'Post 5', content: 'ㅑㅑㅑ', author: 'Author4', date: '2023-01-01' },
-    { id: 6, title: 'Post 6', content: '222', author: 'Author5', date: '2023-01-01' },
+    {
+      id: 1,
+      title: 'Post 1',
+      content: 'Hello',
+      author: 'Author1',
+      date: '2023-01-01',
+    },
+    {
+      id: 2,
+      title: 'Post 2',
+      content: 'hihihihi',
+      author: 'Author2',
+      date: '2023-01-01',
+    },
+    {
+      id: 3,
+      title: 'Post 3',
+      content: 'ㅇㅇㅇi',
+      author: 'Author1',
+      date: '2023-01-01',
+    },
+    {
+      id: 4,
+      title: 'Post 4',
+      content: 'ㅑㅑㅑ',
+      author: 'Author3',
+      date: '2023-01-01',
+    },
+    {
+      id: 5,
+      title: 'Post 5',
+      content: 'ㅑㅑㅑ',
+      author: 'Author4',
+      date: '2023-01-01',
+    },
+    {
+      id: 6,
+      title: 'Post 6',
+      content: '222',
+      author: 'Author5',
+      date: '2023-01-01',
+    },
   ]);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -151,7 +186,10 @@ const Board = () => {
 
       <PostList>
         {currentPosts.map((post) => (
-          <Link key={post.id} to={{ pathname: `/view-post/${post.id}`, state: { post } }}>
+          <Link
+            key={post.id}
+            to={{ pathname: `/view-post/${post.id}`, state: { post } }}
+          >
             <PostListItem>
               <PostTitle>{post.title} 🖼️</PostTitle>
               <PostInfo>
@@ -168,7 +206,9 @@ const Board = () => {
       <Pagination>
         <ArrowButton onClick={() => paginate(1)}>{'◀'}</ArrowButton>
         {Array.from({ length: totalPages }).map((_, index) => (
-          <button key={index + 1} onClick={() => paginate(index + 1)}>{index + 1}</button>
+          <button key={index + 1} onClick={() => paginate(index + 1)}>
+            {index + 1}
+          </button>
         ))}
         <ArrowButton onClick={() => paginate(totalPages)}>{'▶'}</ArrowButton>
       </Pagination>

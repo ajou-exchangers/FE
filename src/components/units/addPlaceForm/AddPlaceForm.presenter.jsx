@@ -99,7 +99,7 @@ export default function AddPlaceFormUI(props) {
 
         <Controller
           control={props.control}
-          name="hasRestroom"
+          name="wifiAvailable"
           render={({ field }) => (
             <S.OptionLabel
               onClick={() => field.onChange(!field.value)}
@@ -109,7 +109,7 @@ export default function AddPlaceFormUI(props) {
                   : '1px solid #e4e0f0',
               }}
             >
-              Restroom
+              Wifi
             </S.OptionLabel>
           )}
         />
