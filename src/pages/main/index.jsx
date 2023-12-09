@@ -24,7 +24,9 @@ const MainPage = () => {
       <div style={styles.pageContainer}>
         <div style={styles.container}>
           <h1 style={styles.heading}>Welcome to Exchangers!</h1>
-          <Link to="/map" style={styles.link}>Try without Login</Link>
+          {!isLoggedIn && (
+            <Link to="/map" style={styles.link}>Try without Login</Link>
+          )}
         </div>
 
         {!isLoggedIn && (
@@ -96,7 +98,7 @@ const styles = {
   icon: {
     width: '60px',
     height: '60px',
-    marginBottom: '17px'
+    marginBottom: '17px',
   },
 };
 
