@@ -138,7 +138,7 @@ const SignupPage = () => {
       formData.append('profileImage', data.profileImage);
 
       const signupResponse = await axios.post('https://exchangers.site/api/exchangers/v1/auth/signup', formData);
-      alert('Signup successful!');
+      alert('Signup successful! To log in, please check the authentication mail in your mailbox!');
       navigate('/');
     } catch (error) {
       console.error('Error during signup:', error.message);

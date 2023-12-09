@@ -115,9 +115,16 @@ export default function LoginPage() {
 
     } catch (error) {
       console.error('Error:', error.response?.data || error.message);
-      setLoggedIn(false);
-      setLoginError('Invalid email or password. Please try again.');
-      setLoginSuccess(false);
+
+      if (error.response?.data === 'Email not verified') {
+        setLoginError('');
+        setLoginSuccess(false);
+        setLoginError('Please check your mailbox and proceed with email authentication!');
+      } else {
+        setLoggedIn(false);
+        setLoginError('Invalid email or password. Please try again.');
+        setLoginSuccess(false);
+      }
     }
   };
 
