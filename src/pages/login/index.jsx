@@ -3,6 +3,8 @@ import { useForm, Controller } from 'react-hook-form';
 import styled from '@emotion/styled';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { updateUserInfo, loginState } from '../../recoil/recoil';
 
 axios.defaults.withCredentials = true;
 
@@ -87,29 +89,41 @@ export default function LoginPage() {
     },
   });
 
+  const [isLoggedIn, setLoggedIn] = useRecoilState(loginState);
   const [loginError, setLoginError] = useState('');
   const [loginSuccess, setLoginSuccess] = useState(false);
+  const setUserInfo = useSetRecoilState(updateUserInfo);
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(
-        'https://exchangers.site/api/exchangers/v1/auth/signin',
-        {
-          email: data.email,
-          password: data.password,
-        },
-        {
-          withCredentials: true,
-        },
-      );
+      const response = await axios.post('https://exchangers.site/api/exchangers/v1/auth/signin', {
+        email: data.email,
+        password: data.password,
+      }, {
+        withCredentials: true,
+      });
       console.log('Login response:', response.data);
+      setLoggedIn(true);
+      setUserInfo(response.data);
+      setLoginError('');
+      setLoginSuccess(true);
+
       alert('Signin successful!');
       navigate('/map');
-    } catch (error) {
-      console.error('Error:', error.response.data);
 
-      setLoginError('Invalid email or password. Please try again.');
+    } catch (error) {
+      console.error('Error:', error.response?.data || error.message);
+
+      if (error.response?.data === 'Email not verified') {
+        setLoginError('');
+        setLoginSuccess(false);
+        setLoginError('Please check your mailbox and proceed with email authentication!');
+      } else {
+        setLoggedIn(false);
+        setLoginError('Invalid email or password. Please try again.');
+        setLoginSuccess(false);
+      }
     }
   };
 

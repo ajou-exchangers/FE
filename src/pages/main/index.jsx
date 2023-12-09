@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Global, css } from '@emotion/react';
+import axios from 'axios';
 
 const MainPage = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const response = await axios.get('https://exchangers.site/api/exchangers/v1/user/me');
+        setIsLoggedIn(response.status === 200);
+      } catch (error) {
+        setIsLoggedIn(false);
+      }
+    };
+    checkLoginStatus();
+  }, []);
+
   return (
     <>
       <Global styles={globalStyles} />
@@ -12,17 +27,20 @@ const MainPage = () => {
           <Link to="/map" style={styles.link}>Try without Login</Link>
         </div>
 
-        <div style={styles.sidebar}>
-          <img src="./globe-americas-solid.svg" style={styles.icon} />
+        {!isLoggedIn && (
+          <div style={styles.sidebar}>
+            {/* Rightbar 내용 */}
+            <img src="./globe-americas-solid.svg" style={styles.icon} />
 
-          <div style={styles.linkContainer}>
-            <Link to="/login" style={styles.link}>Login</Link>
-          </div>
+            <div style={styles.linkContainer}>
+              <Link to="/login" style={styles.link}>Login</Link>
+            </div>
 
-          <div style={styles.linkContainer}>
-            <Link to="/signup" style={styles.link}>Signup</Link>
+            <div style={styles.linkContainer}>
+              <Link to="/signup" style={styles.link}>Signup</Link>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );
@@ -76,8 +94,9 @@ const styles = {
     justifyContent: 'center',
   },
   icon: {
-    width: '50px',
-    height: '50px',
+    width: '60px',
+    height: '60px',
+    marginBottom: '17px'
   },
 };
 
