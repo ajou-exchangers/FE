@@ -233,6 +233,7 @@ const ViewPostPage = () => {
   const handleDeletePost = async () => {
     try {
       await axios.delete(`https://exchangers.site/api/exchangers/v1/board/${postId}`);
+      alert('Post Deleted');
       navigate('/board');
     }
     catch (error) {
@@ -338,7 +339,7 @@ const ViewPostPage = () => {
   };
 
 
-  
+
   return (
     <ViewPostPageWrapper>
       <PostContentWrapper>

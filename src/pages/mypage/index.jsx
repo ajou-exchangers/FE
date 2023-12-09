@@ -149,6 +149,7 @@ const MyPage = ({ userId }) => {
   const handleLogout = async () => {
     try {
       await axios.post('https://exchangers.site/api/exchangers/v1/auth/signout');
+      alert('Logout successful!');
       navigate('/');
       window.location.reload();
     } catch (error) {
