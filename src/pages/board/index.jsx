@@ -128,11 +128,13 @@ const Board = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showAddButton, setShowAddButton] = useState(false);
 
+  const sortPosts = [...posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
   const postsPerPage = 5;
   const totalPages = Math.ceil(posts.length / postsPerPage);
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  const currentPosts = sortPosts.slice(indexOfFirstPost, indexOfLastPost);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
 
