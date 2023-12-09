@@ -74,7 +74,6 @@ const ResultMessage = styled.p`
 `;
 
 
-
 const SignupPage = () => {
   const { handleSubmit, control, watch, setError, formState: { errors } } = useForm({
     defaultValues: {
@@ -123,10 +122,14 @@ const SignupPage = () => {
       console.log(data);
 
       if (!isPasswordValid || !validateEmail(data.email)) {
-        console.error('Invalid input. Please check the form fields.');
+        alert('Invalid input. Please check the form fields.');
         return;
       }
 
+      if (nicknameAvailability !== true) {
+        alert('Nickname is not available. Please choose a different nickname.');
+        return;
+      }
       const formData = new FormData();
       formData.append('email', data.email);
       formData.append('password', data.password);
@@ -141,26 +144,27 @@ const SignupPage = () => {
       console.error('Error during signup:', error.message);
     }
   };
-
   const [nicknameAvailability, setNicknameAvailability] = useState(null);
 
   const handleNicknameAvailabilityCheck = async () => {
     const nickname = watch('nickname');
-    console.log(nickname);
+    setNicknameAvailability(null);
 
     try {
-      setNicknameAvailability(null);
+      console.log(nickname);
       const response = await axios.get(`https://exchangers.site/api/exchangers/v1/auth/check-nickname/${nickname}`);
-      console.log('Response:', response);
+      console.log(nickname);
 
       if (response.status === 200) {
         setNicknameAvailability(true);
-        setError('nickname', {})
+        setError('nickname', {});
       } else {
         setNicknameAvailability(false);
         setError('nickname', { type: 'manual', message: 'Nickname is not available.' });
       }
     } catch (error) {
+      console.error('Error response:', error.response.status, error.response.data);
+
       setNicknameAvailability(false);
     }
   };
@@ -171,8 +175,7 @@ const SignupPage = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormGroup>
           <Label className="input-file-button" htmlFor="input-file">
-            <img
-              src="envelope-regular.svg"
+            <img src="envelope-regular.svg"
               width="20"
               height="20"
               alt="Email Icon"
@@ -197,8 +200,7 @@ const SignupPage = () => {
         </FormGroup>
         <FormGroup>
           <Label>
-            <img
-              src="lock-solid.svg"
+            <img src="lock-solid.svg"
               width="20"
               height="20"
               alt="locked Icon"
@@ -208,8 +210,7 @@ const SignupPage = () => {
               name="password"
               control={control}
               render={({ field }) => (
-                <Input
-                  type="password"
+                <Input type="password"
                   {...field}
                   placeholder="Password at least 6 characters"
                   onChange={(e) => {
@@ -228,8 +229,7 @@ const SignupPage = () => {
         </FormGroup>
         <FormGroup>
           <Label>
-            <img
-              src="lock-solid.svg"
+            <img src="lock-solid.svg"
               width="20"
               height="20"
               alt="locked Icon"
@@ -250,8 +250,7 @@ const SignupPage = () => {
         </FormGroup>
         <FormGroup>
           <Label>
-            <img
-              src="user-regular.svg"
+            <img src="user-regular.svg"
               width="20"
               height="20"
               alt="user Icon"
@@ -308,8 +307,7 @@ const SignupPage = () => {
         </FormGroup>
         {formData.profileImagePreview && (
           <FormGroup>
-            <img
-              src={formData.profileImagePreview}
+            <img src={formData.profileImagePreview}
               alt="Profile Preview"
               width="250"
               height="250"
@@ -319,9 +317,7 @@ const SignupPage = () => {
 
         <Button type="submit">Create an Account</Button>
       </form>
-      <p style={{ fontSize: '0.8em', color: 'gray' }}>
-        Already have an account? <LinkStyled to="/login">Login</LinkStyled>
-      </p>
+      <p style={{ fontSize: '0.8em', color: 'gray' }}> Already have an account? <LinkStyled to="/login">Login</LinkStyled> </p>
     </FormContainer>
   );
 };
