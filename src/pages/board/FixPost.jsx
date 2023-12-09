@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import axios from 'axios';
 
@@ -82,14 +82,33 @@ const Button = styled.button`
   }
 `;
 
-const WritePostPage = ({ onAddPost }) => {
+const FixPostPage = () => {
   const navigate = useNavigate();
-  const [newPost, setNewPost] = useState({ title: '', content: '', image: null });
+  const { id: postId } = useParams();
+  const [existingPost, setExistingPost] = useState({ title: '', content: '', image: null });
   const [imagePreview, setImagePreview] = useState(null);
+
+  useEffect(() => {
+    const fetchPostData = async () => {
+      try {
+        const response = await axios.get(`https://exchangers.site/api/exchangers/v1/board/${postId}`);
+        const postToFix = response.data;
+        setExistingPost({
+          title: postToFix.title || '',
+          content: postToFix.content || '',
+          image: null,
+        });
+        setImagePreview(postToFix.imageUrl);
+      } catch (error) {
+        console.error('Error fetching post data:', error);
+      }
+    };
+    fetchPostData();
+  }, [postId, navigate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewPost((prevPost) => ({ ...prevPost, [name]: value }));
+    setExistingPost((prevPost) => ({ ...prevPost, [name]: value }));
   };
 
   const handleImageChange = (e) => {
@@ -101,41 +120,37 @@ const WritePostPage = ({ onAddPost }) => {
       };
       reader.readAsDataURL(file);
     }
-    setNewPost((prevPost) => ({ ...prevPost, image: file }));
+    setExistingPost((prevPost) => ({ ...prevPost, image: file }));
   };
 
-  const handleAddPost = async () => {
+  const handleFixPost = async (e) => {
+    e.preventDefault();
+
     try {
-      const formData = new FormData();
-      formData.append('title', newPost.title);
-      formData.append('content', newPost.content);
-      formData.append('image', newPost.image);
+      const response = await axios.put(`https://exchangers.site/api/exchangers/v1/board/${postId}`, existingPost);
 
-      await axios.post('https://exchangers.site/api/exchangers/v1/board', formData);
+      setExistingPost(response.data);
 
-      setNewPost({ title: '', content: '', image: null });
-      setImagePreview(null);
-
-      navigate('/board');
+      navigate(`/board/${postId}`);
     } catch (error) {
-      console.error('Error adding post:', error.response);
+      console.error('Error updating post:', error);
     }
   };
 
   return (
     <Container>
-      <h2>Write a New Post</h2>
-      <Form>
+      <h2>Fix Post</h2>
+      <Form onSubmit={handleFixPost}>
         <PostTitle
           name="title"
           placeholder="Title"
-          value={newPost.title}
+          value={existingPost.title}
           onChange={handleInputChange}
         />
         <Content
           name="content"
           placeholder="Content"
-          value={newPost.content}
+          value={existingPost.content}
           onChange={handleInputChange}
         />
         <FileInputContainer>
@@ -144,13 +159,13 @@ const WritePostPage = ({ onAddPost }) => {
             accept="image/*"
             onChange={handleImageChange}
           />
-
         </FileInputContainer>
-        {imagePreview && <ImagePreview src={imagePreview} />}
-        <Button type="button" onClick={handleAddPost}>Add Post</Button>
+        {imagePreview && <ImagePreview src={imagePreview} alt="Image Preview" />}
+
+        <Button type="submit">Fix Post</Button>
       </Form>
     </Container>
   );
 };
 
-export default WritePostPage;
+export default FixPostPage;
