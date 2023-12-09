@@ -35,3 +35,18 @@ export const modalState = atom({
     content: '',
   },
 });
+
+export const placeListState = atom({
+  key: 'placeListState',
+  default: [],
+});
+
+export const searchedPlaceListState = atom({
+  key: 'searchedPlaceListState',
+  default: [],
+});
+
+export const selectedPlaceState = atom({
+  key: 'selectedPlaceState',
+  default: null,
+});

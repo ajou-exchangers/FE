@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
+import styled from '@emotion/styled';
 
 const BoardContainer = styled.div`
   display: flex;
@@ -58,10 +59,10 @@ const PostListItem = styled.li`
 `;
 
 const PostInfo = styled.div`
-display: flex;
-align-items: center;
-margin-left: auto;
-font-size: 10px;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  font-size: 10px;
 `;
 
 const PostTitle = styled.strong`
@@ -122,7 +123,6 @@ const ArrowButton = styled.button`
   transition: background-color 0.3s ease;
 `;
 
-
 const Board = () => {
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -171,6 +171,7 @@ const Board = () => {
       <PostList>
         {currentPosts.map((post) => (
           <Link key={post._id} to={{ pathname: `/board/${post._id}`, state: { post } }}>
+
             <PostListItem>
               <PostTitle>{post.title} {post.imageUrl && '🖼️'} </PostTitle>
               <PostInfo>
@@ -187,6 +188,7 @@ const Board = () => {
       <Pagination>
         <ArrowButton onClick={() => paginate(1)}>{'◀'}</ArrowButton>
         {Array.from({ length: totalPages }).map((_, index) => (<button key={index + 1} onClick={() => paginate(index + 1)}>{index + 1}</button>))}
+        ))}
         <ArrowButton onClick={() => paginate(totalPages)}>{'▶'}</ArrowButton>
       </Pagination>
     </BoardContainer>

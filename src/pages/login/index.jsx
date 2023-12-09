@@ -93,7 +93,6 @@ export default function LoginPage() {
   const [loginError, setLoginError] = useState('');
   const [loginSuccess, setLoginSuccess] = useState(false);
   const setUserInfo = useSetRecoilState(updateUserInfo);
-
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
