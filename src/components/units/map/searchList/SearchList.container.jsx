@@ -6,7 +6,6 @@ import {
   selectedPlaceState,
 } from '@recoil/recoil';
 import SearchListUI from './SearchList.presenter';
-import { set } from 'react-hook-form';
 
 export default function SearchList(props) {
   const [inputValue, setInputValue] = useState('');
@@ -19,6 +18,30 @@ export default function SearchList(props) {
     searchedPlaceListState,
   );
   const [selectedPlace, setSelectedPlace] = useRecoilState(selectedPlaceState);
+  const [selectedButton, setSelectedButton] = useState('Info');
+  const [placeDetail, setPlaceDetail] = useState(null);
+
+  const fetchDetailPlace = async (place) => {
+    try {
+      const response = await fetch(
+        `https://exchangers.site/api/exchangers/v1/locations/${place._id}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      const result = await response.json();
+      console.log(result);
+      setPlaceDetail(result);
+    } catch {
+      console.log(error);
+    }
+  };
 
   const showDropdownList = () => {
     if (inputValue === '') {
@@ -87,6 +110,7 @@ export default function SearchList(props) {
   const clickSearchedPlace = (place) => {
     setInputValue(`${place.enName} (${place.koName})`);
     setSelectedPlace(place);
+    fetchDetailPlace(place);
   };
 
   useEffect(() => {
@@ -108,6 +132,9 @@ export default function SearchList(props) {
       clickSearchedPlace={clickSearchedPlace}
       selectedPlace={selectedPlace}
       setSelectedPlace={setSelectedPlace}
+      selectedButton={selectedButton}
+      setSelectedButton={setSelectedButton}
+      placeDetail={placeDetail}
     />
   );
 }

@@ -73,6 +73,10 @@ export const DropdownBox = styled.ul`
   overflow-y: scroll;
   width: 408px;
   z-index: 10;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const DropdownItem = styled.li`
@@ -96,6 +100,10 @@ export const SearchListContainer = styled.div`
   margin-top: 80px;
   box-sizing: border-box;
   overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const SearchList = styled.ul`
@@ -171,6 +179,10 @@ export const SearchDetailWrapper = styled.div`
   box-sizing: border-box;
   box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, 0.1);
   overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
   background-color: #fff;
   z-index: 10;
 `;
@@ -182,18 +194,102 @@ export const SearchDetailContainer = styled.div`
   align-items: center;
   width: 436px;
   height: 100%;
-  padding: 0 1rem;
   z-index: 1;
+`;
+
+export const SearchDetailImg = styled.img`
+  width: 100%;
+  height: 240px;
+  margin: 0;
+  padding: 0;
+  object-fit: cover;
+`;
+
+export const SearchDetailCloseButton = styled.button`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #999;
+  font-size: 28px;
+  cursor: pointer;
+  border-radius: 50%; // 원형 모양을 만들기 위해 추가
+  display: flex; // 아래 세 줄은 "X"를 버튼의 중앙에 위치시키기 위해 추가
+  align-items: center;
+  justify-content: center;
+  transform: rotate(45deg);
 `;
 
 export const SearchDetailHeader = styled.div`
   width: 100%;
-  height: 100px;
+  height: 160px;
+  margin: 0;
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-around;
+`;
+
+export const SearchDetailKoreanName = styled.h1`
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #222;
+`;
+
+export const SearchDetailEnglishName = styled.h2`
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  font-weight: 400;
+  color: #222;
+`;
+
+export const SearchDetailCategory = styled.h3`
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #999;
+`;
+
+export const SearchDetailNav = styled.div`
+  width: 100%;
+  height: 60px;
   margin: 0;
   padding: 0;
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
+  border-bottom: 1px solid #e5e5e5;
+`;
+
+export const SearchDetailNavButton = styled.button`
+  background-color: #fff;
+  width: 100%;
+  height: 2rem;
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  border-bottom: ${(props) => (props.active ? '3px solid #2b2144' : 'none')};
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const SearchDetailTitle = styled.h2`
@@ -206,37 +302,148 @@ export const SearchDetailTitle = styled.h2`
   color: #222;
 `;
 
-export const SearchDetailCloseButton = styled.button`
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border: none;
-  background-color: transparent;
-  color: #999;
-  font-size: 14px;
-  cursor: pointer;
-`;
-
 export const SearchDetailBody = styled.div`
   width: 100%;
-  height: calc(100% - 100px);
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  height: calc(100% - 140px);
   margin: 0;
-  padding: 0;
-  overflow-y: scroll;
+  padding: 1rem 1.2rem;
 `;
 
-export const SearchDetailImg = styled.img`
-  width: 100%;
-  height: 200px;
-  margin: 0;
-  padding: 0;
-  object-fit: cover;
-`;
-
-export const SearchDetailContent = styled.div`
+export const SearchDetailInfo = styled.div`
   width: 100%;
   height: 100%;
   margin: 0;
-  padding: 20px;
-  box-sizing: border-box;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-around;
+`;
+
+export const SearchDetailInfoAddress = styled.p`
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #222;
+`;
+
+export const SearchDetailInfoDescription = styled.p`
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #222;
+`;
+
+export const SearchDetailReview = styled.div`
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-around;
+`;
+
+export const SearchDetailReviewItem = styled.div`
+  width: 100%;
+  height: 480px;
+  margin: 0;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+`;
+
+export const SearchDetailReviewItemHeader = styled.div`
+  width: 100%;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+`;
+
+export const SearchDetailReviewItemProfileImg = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+`;
+
+export const SearchDetailReviewItemNickname = styled.h3`
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #222;
+`;
+
+export const SearchDetailReviewItemCreatedAt = styled.p`
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: #999;
+`;
+
+export const SearchDetailReviewItemRating = styled.div`
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+`;
+
+export const SearchDetailReviewItemRatingStar = styled.img`
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+`;
+
+export const SearchDetailReviewItemRatingText = styled.p`
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #222;
+`;
+
+export const SearchDetailReviewItemBody = styled.div`
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+`;
+
+export const SearchDetailReviewItemBodyText = styled.p`
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #222;
 `;
