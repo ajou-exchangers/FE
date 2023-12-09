@@ -20,11 +20,11 @@ export default function PlaceReview(props) {
             value={Math.round(props.place.location.reviewAverage)}
           />
           <S.HeaderTotalReviewCount>
-            리뷰 {props.place.location.reviewCount}개
+            {props.place.location.reviewCount} Reviews
           </S.HeaderTotalReviewCount>
         </S.HeaderTotalReviewWrapper>
       </S.ReviewHeader>
-      <S.HeaderReviewButton>리뷰 추가</S.HeaderReviewButton>
+      <S.HeaderReviewButton>+ Write Review</S.HeaderReviewButton>
       <S.ReviewList>
         {props.place.reviews.length > 0 &&
           props.place.reviews.map((review, reviewIndex) => {
