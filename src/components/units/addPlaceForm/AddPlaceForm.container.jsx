@@ -10,34 +10,28 @@ export default function AddPlaceForm(props) {
   const { openModal, closeModal } = useModal();
   const { register, handleSubmit, watch, errors, control } = useForm();
 
-  // POST http://43.200.181.183:8000/locations
-
   const onSubmit = async (data) => {
-    const msgBody = {
-      koName: props.placeName,
-      koAddress: props.placeAddress,
-      kioskAvailable: data.hasKiosk,
-      parkingAvailable: data.hasParking,
-      englishSpeaking: data.englishAvailable,
-      wifiAvailable: data.wifiAvailable,
-      description: data.placeDescription,
-      category: codeToCategory(props.currCategory),
-      image: selectedFile,
-      latitude: props.placeLatLng.latitude,
-      longitude: props.placeLatLng.longitude,
-    };
+    const formData = new FormData();
+    formData.enctype = 'multipart/form-data';
 
-    console.log(typeof selectedFile);
+    formData.append('koName', props.placeName);
+    formData.append('koAddress', props.placeAddress);
+    formData.append('kioskAvailable', data.hasKiosk);
+    formData.append('parkingAvailable', data.hasParking);
+    formData.append('englishSpeaking', data.englishAvailable);
+    formData.append('wifiAvailable', data.wifiAvailable);
+    formData.append('description', data.placeDescription);
+    formData.append('category', codeToCategory(props.currCategory));
+    formData.append('image', selectedFile);
+    formData.append('latitude', props.placeLatLng.latitude);
+    formData.append('longitude', props.placeLatLng.longitude);
 
     try {
       const response = await fetch(
-        'http://15.165.42.212:3000/api/exchangers/v1/locations',
+        'https://exchangers.site/api/exchangers/v1/locations',
         {
           method: 'POST',
-          body: JSON.stringify(msgBody),
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          body: formData,
           credentials: 'include',
         },
       );
