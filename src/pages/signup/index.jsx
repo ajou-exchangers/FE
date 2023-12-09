@@ -109,6 +109,12 @@ const SignupPage = () => {
     setPasswordValid(isValid);
   };
 
+  const validateConfirmPassword = (value) => {
+    const passwordValue = watch('password');
+
+    return value === passwordValue || 'Passwords do not match!';
+  };
+
   const validateEmail = (email) => {
     const isValid = email.endsWith('@ajou.ac.kr');
     if (!isValid) {
@@ -123,6 +129,11 @@ const SignupPage = () => {
 
       if (!isPasswordValid || !validateEmail(data.email)) {
         alert('Invalid input. Please check the form fields.');
+        return;
+      }
+
+      if (errors.confirmPassword) {
+        alert('Passwords do not match. Please re-enter the passwords.');
         return;
       }
 
@@ -229,12 +240,7 @@ const SignupPage = () => {
         </FormGroup>
         <FormGroup>
           <Label>
-            <img src="lock-solid.svg"
-              width="20"
-              height="20"
-              alt="locked Icon"
-              className="input-icon"
-            />
+            <img src="lock-solid.svg" width="20" height="20" alt="locked Icon" className="input-icon" />
             <Controller
               name="confirmPassword"
               control={control}
@@ -245,8 +251,14 @@ const SignupPage = () => {
                   placeholder="Re-enter Password"
                 />
               )}
+              rules={{ validate: validateConfirmPassword }}
             />
           </Label>
+          {errors.confirmPassword && (
+            <ResultMessage success={false}>
+              {errors.confirmPassword.message}
+            </ResultMessage>
+          )}
         </FormGroup>
         <FormGroup>
           <Label>
