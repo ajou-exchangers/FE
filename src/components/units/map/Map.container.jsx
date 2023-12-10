@@ -117,6 +117,25 @@ export default function Map() {
     mapRef.current.panTo(moveLatLon);
   };
 
+  const moveToCurrentLocation = () => {
+    const imageSrc = '/images/curMarker.png',
+      imageSize = new kakao.maps.Size(36, 36),
+      markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+    const currPosition = new kakao.maps.LatLng(
+      userLatLng.latitude,
+      userLatLng.longitude,
+    );
+
+    const marker = new kakao.maps.Marker({
+      position: currPosition,
+      image: markerImage,
+    });
+
+    marker.setMap(mapRef.current);
+    mapRef.current.panTo(currPosition);
+  };
+
   useEffect(() => {
     window.kakao.maps.load(() => {
       const container = document.getElementById('map');
@@ -151,7 +170,12 @@ export default function Map() {
 
   return (
     <>
-      <MapUI openModal={openModal} modalData={modalData} mapRef={mapRef} />
+      <MapUI
+        openModal={openModal}
+        modalData={modalData}
+        mapRef={mapRef}
+        moveToCurrentLocation={moveToCurrentLocation}
+      />
       <SearchList mapRef={mapRef} displayPlaces={displayPlaces} />
     </>
   );
