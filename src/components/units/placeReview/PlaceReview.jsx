@@ -5,9 +5,12 @@ import { getDate } from '@lib/utils';
 import Modal from '../../commons/modal/Modal';
 import useModal from '@hooks/useModal';
 import AddReviewForm from '../addReviewForm/AddReviewForm.container';
+import { useRecoilState } from 'recoil';
+import { loginState } from '@recoil/recoil';
 
 export default function PlaceReview(props) {
   const { openModal } = useModal();
+  const [loginInfo, setLoginInfo] = useRecoilState(loginState);
 
   const modalData = {
     title: 'Add Review',
@@ -39,7 +42,15 @@ export default function PlaceReview(props) {
           </S.HeaderTotalReviewCount>
         </S.HeaderTotalReviewWrapper>
       </S.ReviewHeader>
-      <S.HeaderReviewButton onClick={() => openModal(modalData)}>
+      <S.HeaderReviewButton
+        onClick={() => {
+          if (!loginInfo) {
+            alert('Please login to write a review');
+            return;
+          }
+          openModal(modalData);
+        }}
+      >
         + Write Review
       </S.HeaderReviewButton>
       <Modal />

@@ -8,6 +8,8 @@ import {
   placeListState,
   searchedPlaceListState,
   selectedPlaceState,
+  loginState,
+  categoryState,
 } from '@recoil/recoil';
 import SearchList from './searchList/SearchList.container';
 
@@ -22,6 +24,8 @@ export default function Map() {
   const [selectedPlace, setSelectedPlace] = useRecoilState(selectedPlaceState);
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState(null);
+  const [loginInfo, setLoginInfo] = useRecoilState(loginState);
+  const [category, setCategory] = useRecoilState(categoryState);
 
   const modalData = {
     title: 'Add Place',
@@ -37,6 +41,26 @@ export default function Map() {
       longitude: lon,
     });
   });
+
+  const fetchUserInfo = async () => {
+    try {
+      const response = await fetch(
+        'https://exchangers.site/api/exchangers/v1/user/me',
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        },
+      );
+      if (response.ok) {
+        setLoginInfo(true);
+      }
+    } catch {
+      console.log(error);
+    }
+  };
 
   const fetchPlaces = async () => {
     try {
@@ -137,6 +161,10 @@ export default function Map() {
   };
 
   useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  useEffect(() => {
     window.kakao.maps.load(() => {
       const container = document.getElementById('map');
       const options = {
@@ -157,7 +185,6 @@ export default function Map() {
 
   useEffect(() => {
     if (searchedPlaceList) {
-      console.log('searchedPlaceList', searchedPlaceList);
       displayPlaces(searchedPlaceList);
     }
   }, [searchedPlaceList, mapRef]);
@@ -168,6 +195,18 @@ export default function Map() {
     }
   }, [selectedPlace]);
 
+  useEffect(() => {
+    if (category !== '') {
+      const filteredList = placeList.filter(
+        (place) => place.category === category,
+      );
+      setSearchedPlaceList(filteredList);
+      if (filteredList.length > 0) {
+        moveToPin(filteredList[0]);
+      }
+    }
+  }, [category]);
+
   return (
     <>
       <MapUI
@@ -175,6 +214,7 @@ export default function Map() {
         modalData={modalData}
         mapRef={mapRef}
         moveToCurrentLocation={moveToCurrentLocation}
+        loginInfo={loginInfo}
       />
       <SearchList mapRef={mapRef} displayPlaces={displayPlaces} />
     </>

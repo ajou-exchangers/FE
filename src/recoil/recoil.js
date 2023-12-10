@@ -25,7 +25,6 @@ export const updateUserInfo = selector({
   set: ({ set }, newUserInfo) => set(userInfo, newUserInfo),
 });
 
-
 // 전역 모달 상태
 export const modalState = atom({
   key: 'modalState',
@@ -49,4 +48,9 @@ export const searchedPlaceListState = atom({
 export const selectedPlaceState = atom({
   key: 'selectedPlaceState',
   default: null,
+});
+
+export const categoryState = atom({
+  key: 'categoryState',
+  default: '',
 });
