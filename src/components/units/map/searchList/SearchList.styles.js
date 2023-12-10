@@ -122,7 +122,6 @@ export const SearchList = styled.ul`
 `;
 
 export const SearchItem = styled.li`
-
   width: 100%;
   height: auto;
   display: flex;
@@ -394,76 +393,4 @@ export const SearchDetailReviewItemHeader = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: start;
-`;
-
-export const SearchDetailReviewItemProfileImg = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
-  object-fit: cover;
-`;
-
-export const SearchDetailReviewItemNickname = styled.h3`
-  width: 100%;
-  height: 20px;
-  margin: 0;
-  padding: 0;
-  font-size: 14px;
-  font-weight: 700;
-  color: #222;
-`;
-
-export const SearchDetailReviewItemCreatedAt = styled.p`
-  width: 100%;
-  height: 20px;
-  margin: 0;
-  padding: 0;
-  font-size: 12px;
-  font-weight: 400;
-  color: #999;
-`;
-
-export const SearchDetailReviewItemRating = styled.div`
-  width: 100%;
-  height: 20px;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: start;
-`;
-
-export const SearchDetailReviewItemRatingStar = styled.img`
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-`;
-
-export const SearchDetailReviewItemRatingText = styled.p`
-  width: 100%;
-  height: 20px;
-  margin: 0;
-  padding: 0;
-  font-size: 14px;
-  font-weight: 400;
-  color: #222;
-`;
-
-export const SearchDetailReviewItemBody = styled.div`
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-`;
-
-export const SearchDetailReviewItemBodyText = styled.p`
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  font-size: 14px;
-  font-weight: 400;
-  color: #222;
 `;

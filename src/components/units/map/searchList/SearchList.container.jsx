@@ -63,8 +63,9 @@ export default function SearchList(props) {
   };
 
   const clickDropdownItem = (place) => {
-    setInputValue(`${place.enName} (ko: ${place.koName})`);
+    setInputValue(`${place.enName} (${place.koName})`);
     setSelectedPlace(place);
+    fetchDetailPlace(place);
     setHasInputValue(false);
   };
 
