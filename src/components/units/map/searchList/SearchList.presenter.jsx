@@ -11,7 +11,6 @@ export default function SearchListUI(props) {
     window.getSelection().removeAllRanges();
   };
 
-
   return (
     <S.SideWrapper>
       <S.SearchListWrapper>
@@ -114,35 +113,36 @@ export default function SearchListUI(props) {
               <S.SearchDetailCategory>
                 {props.selectedPlace.category}
               </S.SearchDetailCategory>
+              <S.SearchDetailNav>
+                <S.SearchDetailNavButton
+                  onClick={() => props.setSelectedButton('Info')}
+                  active={props.selectedButton === 'Info'}
+                >
+                  Info
+                </S.SearchDetailNavButton>
+                <S.SearchDetailNavButton
+                  onClick={() => props.setSelectedButton('Review')}
+                  active={props.selectedButton === 'Review'}
+                >
+                  Review
+                </S.SearchDetailNavButton>
+              </S.SearchDetailNav>
             </S.SearchDetailHeader>
-            <S.SearchDetailNav>
-              <S.SearchDetailNavButton
-                onClick={() => props.setSelectedButton('Info')}
-                active={props.selectedButton === 'Info'}
-              >
-                Info
-              </S.SearchDetailNavButton>
-              <S.SearchDetailNavButton
-                onClick={() => props.setSelectedButton('Review')}
-                active={props.selectedButton === 'Review'}
-              >
-                Review
-              </S.SearchDetailNavButton>
-            </S.SearchDetailNav>
             <S.SearchDetailBody>
               {props.selectedButton === 'Info' ? (
                 <S.SearchDetailInfo>
-                  <p>
-                    <S.SearchDetailInfoAddressContainer>
-                      <img src="location-dot-solid.svg" alt="Location icon" width="22" height="22" />
-                      <S.SearchDetailInfoAddress>
-                        {props.selectedPlace.enAddress}
-                      </S.SearchDetailInfoAddress>
-                    </S.SearchDetailInfoAddressContainer></p>
+                  <S.SearchDetailInfoDescriptionContainer>
+                    <S.SearchDetailInfoDescription>
+                      {`"${props.selectedPlace.description}"`}
+                    </S.SearchDetailInfoDescription>
+                  </S.SearchDetailInfoDescriptionContainer>
 
-                  <p>
-                    <S.SearchDetailInfoAddressContainer>
-                      <img src="location-dot-solid.svg" alt="Location icon" width="22" height="22" />
+                  <S.SearchDetailInfoAddressContainer>
+                    <S.LocationIcon
+                      src="location-dot-solid.svg"
+                      alt="Location icon"
+                    />
+                    <S.SearchDetailInfoAddressWrapper>
                       <S.SearchDetailInfoAddress>
                         <textarea
                           ref={addressRef}
@@ -152,16 +152,76 @@ export default function SearchListUI(props) {
                         />
                         {props.selectedPlace.koAddress}
                       </S.SearchDetailInfoAddress>
-                      <img src="/copy-solid.svg" alt="Copy Address" width="15" height="15" style={{ cursor: 'pointer' }}
-                        onClick={handleCopyAddress}
-                      />
-                    </S.SearchDetailInfoAddressContainer></p>
-                  <p>
-                    <S.SearchDetailInfoAddressContainer>
-                      <img src="heart-solid.svg" alt="heart icon" width="22" height="22" />
-                      <S.SearchDetailInfoDescription>
-                        {props.selectedPlace.description}
-                      </S.SearchDetailInfoDescription></S.SearchDetailInfoAddressContainer></p>
+                      <S.SearchDetailInfoAddress>
+                        {props.selectedPlace.enAddress}
+                      </S.SearchDetailInfoAddress>
+                    </S.SearchDetailInfoAddressWrapper>
+                    <S.Icon
+                      src="/copy-solid.svg"
+                      alt="Copy Address"
+                      width="15"
+                      height="15"
+                      style={{ cursor: 'pointer' }}
+                      onClick={handleCopyAddress}
+                    />
+                  </S.SearchDetailInfoAddressContainer>
+                  <S.AdditionalInfoWrapper>
+                    {props.selectedPlace.wifiAvailable && (
+                      <S.AdditionalInfo>
+                        <S.Icon
+                          src="/wifi-solid.svg"
+                          alt="Wifi available"
+                          width="15"
+                          height="15"
+                        />
+                        <S.AdditionalInfoDescription>
+                          Wifi Available
+                        </S.AdditionalInfoDescription>
+                      </S.AdditionalInfo>
+                    )}
+
+                    {props.selectedPlace.parkingAvailable && (
+                      <S.AdditionalInfo>
+                        <S.Icon
+                          src="/square-parking-solid.svg"
+                          alt="Parking available"
+                          width="15"
+                          height="15"
+                        />
+                        <S.AdditionalInfoDescription>
+                          Parking Available
+                        </S.AdditionalInfoDescription>
+                      </S.AdditionalInfo>
+                    )}
+
+                    {props.selectedPlace.englishSpeaking && (
+                      <S.AdditionalInfo>
+                        <S.Icon
+                          src="/e-solid.svg"
+                          alt="English speaking"
+                          width="15"
+                          height="15"
+                        />
+                        <S.AdditionalInfoDescription>
+                          English Speaking
+                        </S.AdditionalInfoDescription>
+                      </S.AdditionalInfo>
+                    )}
+
+                    {props.selectedPlace.kioskAvailable && (
+                      <S.AdditionalInfo>
+                        <S.Icon
+                          src="/k-solid.svg"
+                          alt="Kiosk available"
+                          width="15"
+                          height="15"
+                        />
+                        <S.AdditionalInfoDescription>
+                          Kiosk Available
+                        </S.AdditionalInfoDescription>
+                      </S.AdditionalInfo>
+                    )}
+                  </S.AdditionalInfoWrapper>
                 </S.SearchDetailInfo>
               ) : (
                 <PlaceReview place={props.placeDetail} />

@@ -192,7 +192,7 @@ export const SearchDetailWrapper = styled.div`
   position: relative;
   margin-left: 1rem;
   margin-top: 160px;
-  height: calc(100vh - 180px);
+  height: calc(100% - 160px);
   width: 100%;
   border-radius: 30px;
   box-sizing: border-box;
@@ -211,6 +211,7 @@ export const SearchDetailContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: start;
   width: 436px;
   height: 100%;
   z-index: 1;
@@ -251,11 +252,12 @@ export const SearchDetailHeader = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;
-  justify-content: space-around;
+  justify-content: start;
 `;
 
 export const SearchDetailKoreanName = styled.h1`
   width: 100%;
+  height: 30px;
   margin: 0;
   padding: 0;
   font-size: 24px;
@@ -265,7 +267,7 @@ export const SearchDetailKoreanName = styled.h1`
 
 export const SearchDetailEnglishName = styled.h2`
   width: 100%;
-  height: 20px;
+  height: 24px;
   margin: 0;
   padding: 0;
   font-size: 16px;
@@ -275,7 +277,7 @@ export const SearchDetailEnglishName = styled.h2`
 
 export const SearchDetailCategory = styled.h3`
   width: 100%;
-  height: 20px;
+  height: 14px;
   margin: 0;
   padding: 0;
   font-size: 14px;
@@ -285,8 +287,8 @@ export const SearchDetailCategory = styled.h3`
 
 export const SearchDetailNav = styled.div`
   width: 100%;
-  height: 60px;
-  margin: 0;
+  height: 40px;
+  margin-top: 1rem;
   padding: 0;
   display: flex;
   flex-direction: row;
@@ -298,7 +300,7 @@ export const SearchDetailNav = styled.div`
 export const SearchDetailNavButton = styled.button`
   background-color: #fff;
   width: 100%;
-  height: 2rem;
+  height: 40px;
   margin: 0;
   padding: 0;
   border: none;
@@ -311,22 +313,12 @@ export const SearchDetailNavButton = styled.button`
   }
 `;
 
-export const SearchDetailTitle = styled.h2`
-  width: 100%;
-  height: 40px;
-  margin: 0;
-  padding: 0;
-  font-size: 20px;
-  font-weight: 700;
-  color: #222;
-`;
-
 export const SearchDetailBody = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: start;
-  height: calc(100% - 140px);
   margin: 0;
   padding: 1rem 1.2rem;
 `;
@@ -338,13 +330,38 @@ export const SearchDetailInfo = styled.div`
   padding: 0;
   display: flex;
   flex-direction: column;
-  align-items: start;
-  justify-content: space-around;
+  align-items: center;
+  justify-content: start;
 `;
 
-export const SearchDetailInfoAddress = styled.p`
+export const SearchDetailInfoAddressWrapper = styled.div`
   width: 100%;
   height: 20px;
+  margin-left: 0.5rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+`;
+
+export const LocationIcon = styled.img`
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  padding: 0;
+`;
+
+export const Icon = styled.img`
+  width: 20px;
+  height: 20px;
+  margin-right: 0.5rem;
+  padding: 0;
+`;
+
+export const SearchDetailInfoAddress = styled.div`
+  width: 100%;
+  height: 50px;
   margin: 0;
   padding: 0;
   font-size: 14px;
@@ -354,10 +371,10 @@ export const SearchDetailInfoAddress = styled.p`
 
 export const SearchDetailInfoDescription = styled.p`
   width: 100%;
-  height: 20px;
+  height: 100%;
   margin: 0;
   padding: 0;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   color: #222;
 `;
@@ -401,7 +418,60 @@ export const CopyButton = styled.button`
   cursor: pointer;
 `;
 
-export const SearchDetailInfoAddressContainer = styled.div`
+export const SearchDetailInfoDescriptionContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+`;
+
+export const SearchDetailInfoAddressContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 4rem;
+
+  border-top: 1px solid #e5e5e5;
+  padding-top: 3rem;
+`;
+
+export const AdditionalInfoWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+
+  border-top: 1px solid #e5e5e5;
+
+  padding-top: 3rem;
+
+  margin-top: 5rem;
+`;
+
+export const AdditionalInfo = styled.div`
+  width: 100%;
+  height: 40px
+  margin: 0;
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+`;
+
+export const AdditionalInfoDescription = styled.div`
+  margin-left: 1rem;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  font-weight: 400;
+  color: #222;
 `;
