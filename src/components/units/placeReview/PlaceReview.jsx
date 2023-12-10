@@ -2,8 +2,23 @@ import React from 'react';
 import * as S from './PlaceReview.styles';
 import { Rate } from 'antd';
 import { getDate } from '@lib/utils';
+import Modal from '../../commons/modal/Modal';
+import useModal from '@hooks/useModal';
+import AddReviewForm from '../addReviewForm/AddReviewForm.container';
 
 export default function PlaceReview(props) {
+  const { openModal } = useModal();
+
+  const modalData = {
+    title: 'Add Review',
+    content: (
+      <AddReviewForm
+        locationId={props.place.location._id}
+        locationCategory={props.place.location.category}
+      />
+    ),
+  };
+
   return (
     <S.Wrapper>
       <S.ReviewHeader>
@@ -24,7 +39,10 @@ export default function PlaceReview(props) {
           </S.HeaderTotalReviewCount>
         </S.HeaderTotalReviewWrapper>
       </S.ReviewHeader>
-      <S.HeaderReviewButton>+ Write Review</S.HeaderReviewButton>
+      <S.HeaderReviewButton onClick={() => openModal(modalData)}>
+        + Write Review
+      </S.HeaderReviewButton>
+      <Modal />
       <S.ReviewList>
         {props.place.reviews.length > 0 &&
           props.place.reviews.map((review, reviewIndex) => {
@@ -54,29 +72,29 @@ export default function PlaceReview(props) {
                   <S.ReviewItemBodyComment>
                     {review.review}
                   </S.ReviewItemBodyComment>
-                  <S.ReviewCardImageWrapper>
-                    {review.images.map((image, imageIndex) => {
+
+                  {review &&
+                    review.images.map((image, imageIndex) => {
                       return (
-                        <S.ReviewCardImage
-                          key={imageIndex}
-                          src={image}
-                          alt="리뷰 이미지"
-                        />
+                        <S.ReviewCardImageWrapper>
+                          <S.ReviewCardImage
+                            key={imageIndex}
+                            src={image}
+                            alt="리뷰 이미지"
+                          />
+                        </S.ReviewCardImageWrapper>
                       );
                     })}
-                  </S.ReviewCardImageWrapper>
                 </S.ReviewItemBody>
-                <S.ReviewItemFooter>
-                  <S.ReviewKeywordWrapper>
-                    {review.keywords.map((keyword, keywordIndex) => {
-                      return (
-                        <S.ReviewKeywordBox key={keywordIndex}>
-                          <S.ReviewKeyword>{keyword.keyword}</S.ReviewKeyword>
-                        </S.ReviewKeywordBox>
-                      );
-                    })}
-                  </S.ReviewKeywordWrapper>
-                </S.ReviewItemFooter>
+                <S.ReviewKeywordWrapper>
+                  {review.keywords.map((keyword, keywordIndex) => {
+                    return (
+                      <S.ReviewKeywordBox key={keywordIndex}>
+                        <S.ReviewKeyword>{keyword.keyword}</S.ReviewKeyword>
+                      </S.ReviewKeywordBox>
+                    );
+                  })}
+                </S.ReviewKeywordWrapper>
               </S.ReviewItem>
             );
           })}
