@@ -122,10 +122,11 @@ export const SearchList = styled.ul`
 `;
 
 export const SearchItem = styled.li`
+
   width: 100%;
-  height: 120px;
+  height: auto;
   display: flex;
-  align-items: center;
+  flex-direction: row;
   border-bottom: 1px solid #ebebeb;
   padding: 10px 0;
   cursor: pointer;
@@ -135,13 +136,18 @@ export const SearchItemImg = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: 20px;
-  object-fit: cover;
+  margin-right: 10px;
+`;
+
+export const SearchItemContent = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;
 
 export const SearchItemTitle = styled.h3`
   width: 100%;
-  height: 20px;
   margin: 0;
   padding: 0;
   font-size: 14px;
@@ -151,22 +157,36 @@ export const SearchItemTitle = styled.h3`
 
 export const SearchItemAddress = styled.p`
   width: 100%;
-  height: 20px;
   margin: 0;
   padding: 0;
   font-size: 12px;
   font-weight: 400;
   color: #999;
+  margin-bottom: 5px;
 `;
 
 export const SearchItemComment = styled.p`
   width: 100%;
-  height: 20px;
   margin: 0;
   padding: 0;
   font-size: 12px;
   font-weight: 400;
   color: #999;
+  margin-bottom: 5px;
+`;
+
+export const SearchItemReview = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const SearchItemReviewText = styled.p`
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: #999;
+  margin-left: 5px;
 `;
 
 export const SearchDetailWrapper = styled.div`
