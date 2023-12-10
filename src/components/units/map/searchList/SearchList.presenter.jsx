@@ -1,8 +1,17 @@
 import * as S from './SearchList.styles';
 import { Rate } from 'antd';
+import React, { useRef } from 'react';
 import PlaceReview from '../../placeReview/PlaceReview';
 
 export default function SearchListUI(props) {
+  const addressRef = useRef(null);
+  const handleCopyAddress = () => {
+    addressRef.current.select();
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+  };
+
+
   return (
     <S.SideWrapper>
       <S.SearchListWrapper>
@@ -123,17 +132,36 @@ export default function SearchListUI(props) {
             <S.SearchDetailBody>
               {props.selectedButton === 'Info' ? (
                 <S.SearchDetailInfo>
-                  <S.SearchDetailInfoAddress>
-                    {props.selectedPlace.enAddress}
-                  </S.SearchDetailInfoAddress>
+                  <p>
+                    <S.SearchDetailInfoAddressContainer>
+                      <img src="location-dot-solid.svg" alt="Location icon" width="22" height="22" />
+                      <S.SearchDetailInfoAddress>
+                        {props.selectedPlace.enAddress}
+                      </S.SearchDetailInfoAddress>
+                    </S.SearchDetailInfoAddressContainer></p>
 
-                  <S.SearchDetailInfoAddress>
-                    {props.selectedPlace.koAddress}
-                  </S.SearchDetailInfoAddress>
-
-                  <S.SearchDetailInfoDescription>
-                    {props.selectedPlace.description}
-                  </S.SearchDetailInfoDescription>
+                  <p>
+                    <S.SearchDetailInfoAddressContainer>
+                      <img src="location-dot-solid.svg" alt="Location icon" width="22" height="22" />
+                      <S.SearchDetailInfoAddress>
+                        <textarea
+                          ref={addressRef}
+                          value={props.selectedPlace.koAddress}
+                          readOnly
+                          style={{ position: 'absolute', left: '-9999px' }}
+                        />
+                        {props.selectedPlace.koAddress}
+                      </S.SearchDetailInfoAddress>
+                      <img src="/copy-solid.svg" alt="Copy Address" width="15" height="15" style={{ cursor: 'pointer' }}
+                        onClick={handleCopyAddress}
+                      />
+                    </S.SearchDetailInfoAddressContainer></p>
+                  <p>
+                    <S.SearchDetailInfoAddressContainer>
+                      <img src="heart-solid.svg" alt="heart icon" width="22" height="22" />
+                      <S.SearchDetailInfoDescription>
+                        {props.selectedPlace.description}
+                      </S.SearchDetailInfoDescription></S.SearchDetailInfoAddressContainer></p>
                 </S.SearchDetailInfo>
               ) : (
                 <PlaceReview place={props.placeDetail} />
