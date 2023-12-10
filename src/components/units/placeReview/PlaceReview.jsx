@@ -22,6 +22,8 @@ export default function PlaceReview(props) {
     ),
   };
 
+  console.log('props.place', props.place);
+
   return (
     <S.Wrapper>
       <S.ReviewHeader>
@@ -84,18 +86,19 @@ export default function PlaceReview(props) {
                     {review.review}
                   </S.ReviewItemBodyComment>
 
-                  {review &&
-                    review.images.map((image, imageIndex) => {
-                      return (
-                        <S.ReviewCardImageWrapper>
+                  {review.images.length > 0 && (
+                    <S.ReviewCardImageWrapper>
+                      {review.images.map((image, imageIndex) => {
+                        return (
                           <S.ReviewCardImage
                             key={imageIndex}
                             src={image}
                             alt="리뷰 이미지"
                           />
-                        </S.ReviewCardImageWrapper>
-                      );
-                    })}
+                        );
+                      })}
+                    </S.ReviewCardImageWrapper>
+                  )}
                 </S.ReviewItemBody>
                 <S.ReviewKeywordWrapper>
                   {review.keywords.map((keyword, keywordIndex) => {

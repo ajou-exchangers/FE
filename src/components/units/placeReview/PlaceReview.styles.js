@@ -195,8 +195,7 @@ export const ReviewCardImageWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
-  overflow: visible;
+  justify-content: start;
   overflow-x: scroll;
 
   &::-webkit-scrollbar {
