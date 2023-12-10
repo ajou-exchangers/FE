@@ -40,12 +40,10 @@ const NavLink = styled.a`
 `;
 
 const ProfileImage = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
-  object-fit: cover;
-  margin-top: 30px;
-  cursor: pointer;
+  object-fit: fill;
 `;
 
 const UserInfo = styled.div`
@@ -116,19 +114,18 @@ const CommentTitle = styled.span`
 `;
 
 const MyPage = ({ userId }) => {
+  const [user, setUser] = useState(null);
   const [selectedTab, setSelectedTab] = useState('profile');
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedUser, setEditedUser] = useState({});
+  // const [isEditing, setIsEditing] = useState(false);
+  // const [editedUser, setEditedUser] = useState({});
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
   const navigate = useNavigate();
-  const user = useRecoilValue(userInfo);
   const setUserInfo = useSetRecoilState(updateUserInfo);
 
   useEffect(() => {
     fetchUserData();
-  }
-    , []);
+  }, []);
 
   const fetchUserData = async () => {
     try {
@@ -136,6 +133,7 @@ const MyPage = ({ userId }) => {
 
       if (response.status === 200) {
         const userData = response.data;
+        setUser(userData);
         setUserInfo(userData);
       } else {
         navigate('/login');
@@ -143,17 +141,6 @@ const MyPage = ({ userId }) => {
     } catch (error) {
       console.error('Error fetching user data:', error);
       navigate('/login');
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await axios.post('https://exchangers.site/api/exchangers/v1/auth/signout');
-      alert('Logout successful!');
-      navigate('/');
-      window.location.reload();
-    } catch (error) {
-      console.error('Logout failed', error.message);
     }
   };
 
@@ -190,17 +177,15 @@ const MyPage = ({ userId }) => {
     }
   };
 
-  const handleEditProfile = () => {
-    setIsEditing(true);
-  };
-
-  const handleSaveChanges = () => {
-    setUserInfo(editedUser);
-    setIsEditing(false);
-  };
-
-  const handleCancelEdit = () => {
-    setIsEditing(false);
+  const handleLogout = async () => {
+    try {
+      await axios.post('https://exchangers.site/api/exchangers/v1/auth/signout');
+      alert('Logout successful!');
+      navigate('/');
+      window.location.reload();
+    } catch (error) {
+      console.error('Logout failed', error.message);
+    }
   };
 
   const renderContent = () => {
@@ -210,63 +195,38 @@ const MyPage = ({ userId }) => {
           <div>
             {user && (
               <div>
-                {isEditing ? (
-                  <div>
-                    <UserInfoContainer>
-                      <ProfileImage
-                        src={editedUser.profileImage || user.profileImage}
+                <div>
+                  <h2>My Profile</h2>
+                  <UserInfoContainer>
+                    {user.profile ? (
+                      <ProfileImage src={user.profile}
                         alt="Profile"
-                        onClick={() => document.getElementById('fileInput').click()}
                       />
-                      <br />
-                      <FileInput
-                        type="file"
-                        id="fileInput"
-                        style={{ display: 'none' }}
-                        onChange={handleImageChange}
+                    ) : (
+                      <ProfileImage src="user-regular.svg"
+                        alt="Default Profile"
                       />
-                    </UserInfoContainer>
+                    )}
+                  </UserInfoContainer>
+
+                  <UserInfo>
+                    <Label>Email</Label> <br />
+                    <Value>{user.email}</Value>
+                  </UserInfo>
+                  <UserInfo>
                     <Label>Nickname</Label> <br />
-                    <NicknameInput
-                      type="text"
-                      name="nickname"
-                      value={editedUser.nickname || user.nickname}
-                      onChange={handleInputChange}
-                    />
-                    <br />
-                    <Button onClick={handleSaveChanges}>Save Changes</Button>
-                    <Button onClick={handleCancelEdit}>Cancel</Button>
-                  </div>
-                ) : (
-                  <div>
-                    <h2>My Profile</h2>
-                    {/* <UserInfoContainer>
-                      <ProfileImage src={user.profileImage} alt="Profile" />
-                    </UserInfoContainer> */}
-                    <UserInfo>
-                      <Label>Email</Label>
-                      <br />
-                      <Value>{user.email}</Value>
-                    </UserInfo>
-                    <UserInfo>
-                      <Label>Nickname</Label>
-                      <br />
-                      <Value>{user.nickname}</Value>
-                    </UserInfo>
-                    <UserInfo>
-                      <Label>Campus</Label>
-                      <br />
-                      <Value>Ajou Univ</Value>
-                    </UserInfo>
-                    {/* <NicknameButton onClick={handleEditProfile}>
-                      Change Nickname
-                    </NicknameButton> */}
-                  </div>
-                )}
+                    <Value>{user.nickname}</Value>
+                  </UserInfo>
+                  <UserInfo>
+                    <Label>Campus</Label> <br />
+                    <Value>Ajou Univ</Value>
+                  </UserInfo>
+                </div>
               </div>
             )}
           </div>
         );
+
       case 'posts':
         return (
           <div>
@@ -279,13 +239,13 @@ const MyPage = ({ userId }) => {
             ))}
           </div>
         );
+
       case 'comments':
         return (
           <div>
             <h2>My Comments</h2>
             {comments.map((comment, index) => (
-              <CommentTitle key={comment.id}>
-                <value>{index + 1}. {comment.content}</value>
+              <CommentTitle key={comment.id}> <value>{index + 1}. {comment.content}</value>
               </CommentTitle>
             ))}
           </div>

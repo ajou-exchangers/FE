@@ -50,16 +50,21 @@ export default function SearchListUI(props) {
                     src={searchedPlace.image}
                     alt={searchedPlace.enName}
                   />
-                  <S.SearchItemTitle>{searchedPlace.enName}</S.SearchItemTitle>
-                  <S.SearchItemAddress>
-                    {searchedPlace.enAddress}
-                  </S.SearchItemAddress>
-                  <S.SearchItemComment>
-                    {searchedPlace.description}
-                  </S.SearchItemComment>
-
-                  <Rate disabled defaultValue={searchedPlace.reviewAverage} />
-                  <p>{searchedPlace.reviewCount}</p>
+                  <S.SearchItemContent>
+                    <S.SearchItemTitle>{searchedPlace.enName}</S.SearchItemTitle>
+                    <S.SearchItemAddress>
+                      {searchedPlace.enAddress}
+                    </S.SearchItemAddress>
+                    <S.SearchItemComment>
+                      {searchedPlace.description}
+                    </S.SearchItemComment>
+                    <S.SearchItemReview>
+                      <Rate disabled defaultValue={searchedPlace.reviewAverage} />
+                      <S.SearchItemReviewText>
+                        {searchedPlace.reviewCount}
+                      </S.SearchItemReviewText>
+                    </S.SearchItemReview>
+                  </S.SearchItemContent>
                 </S.SearchItem>
               );
             })}
@@ -109,6 +114,11 @@ export default function SearchListUI(props) {
                   <S.SearchDetailInfoAddress>
                     {props.selectedPlace.enAddress}
                   </S.SearchDetailInfoAddress>
+
+                  <S.SearchDetailInfoAddress>
+                    {props.selectedPlace.koAddress}
+                  </S.SearchDetailInfoAddress>
+                  
                   <S.SearchDetailInfoDescription>
                     {props.selectedPlace.description}
                   </S.SearchDetailInfoDescription>
