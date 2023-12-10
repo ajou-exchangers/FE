@@ -211,39 +211,32 @@ export const ReviewCardImage = styled.img`
   margin: 0 2px;
 `;
 
-export const ReviewItemFooter = styled.div`
-  width: 100%;
-  height: 40px;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-`;
-
 export const ReviewKeywordWrapper = styled.div`
   width: 100%;
-  height: 40px;
-  margin: 0;
+  height: auto;
+  margin-top: 1rem;
   padding: 0;
   display: flex;
-  flex-direction: row;
+  flex-direction: row-wrap;
   align-items: center;
+  overflow-x: scroll;
   justify-content: flex-start;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const ReviewKeywordBox = styled.div`
-  width: auto;
   height: 24px;
   margin: 0 4px 0 0;
   padding: 0 8px;
   border-radius: 4px;
   background-color: #f5f5f5;
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 `;
 
 export const ReviewKeyword = styled.span`
