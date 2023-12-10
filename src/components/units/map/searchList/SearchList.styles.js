@@ -119,6 +119,11 @@ export const SearchList = styled.ul`
   border-radius: 30px;
   box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, 0.1);
   margin-top: 2rem;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const SearchItem = styled.li`
@@ -456,7 +461,7 @@ export const AdditionalInfoWrapper = styled.div`
 
 export const AdditionalInfo = styled.div`
   width: 100%;
-  height: 40px
+  height: 40px;
   margin: 0;
   padding: 1rem;
   display: flex;
@@ -474,4 +479,41 @@ export const AdditionalInfoDescription = styled.div`
   font-size: 16px;
   font-weight: 400;
   color: #222;
+`;
+
+export const CategoryWrapper = styled.div`
+  position: absolute;
+
+  left: 436px;
+  width: 408px;
+  height: 60px;
+  margin-top: 80px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  margin-left: 1rem;
+
+  z-index: 10;
+`;
+
+export const CategoryButton = styled.button`
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background-color: #fff;
+  border: ${(props) => (props.active ? '4px solid #20314e' : 'none')};
+  font-size: 1.2rem;
+  font-weight: 400;
+  box-shadow: 0 0.2rem 0.4rem 0 #00000080;
+  cursor: pointer;
+  outline: none;
+  margin-right: 1rem;
+`;
+
+export const CategoryIcon = styled.img`
+  padding-top: 4px;
+  width: 30px;
+  height: 30px;
 `;

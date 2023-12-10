@@ -4,6 +4,7 @@ import {
   placeListState,
   searchedPlaceListState,
   selectedPlaceState,
+  categoryState,
 } from '@recoil/recoil';
 import SearchListUI from './SearchList.presenter';
 
@@ -20,6 +21,8 @@ export default function SearchList(props) {
   const [selectedPlace, setSelectedPlace] = useRecoilState(selectedPlaceState);
   const [selectedButton, setSelectedButton] = useState('Info');
   const [placeDetail, setPlaceDetail] = useState(null);
+
+  const [category, setCategory] = useRecoilState(categoryState);
 
   const fetchDetailPlace = async (place) => {
     try {
@@ -114,6 +117,10 @@ export default function SearchList(props) {
     fetchDetailPlace(place);
   };
 
+  const clickCategoryButton = (e) => {
+    setCategory(e.target.alt);
+  };
+
   useEffect(() => {
     showDropdownList();
   }, [inputValue]);
@@ -136,6 +143,8 @@ export default function SearchList(props) {
       selectedButton={selectedButton}
       setSelectedButton={setSelectedButton}
       placeDetail={placeDetail}
+      category={category}
+      clickCategoryButton={clickCategoryButton}
     />
   );
 }

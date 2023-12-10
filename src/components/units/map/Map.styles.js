@@ -32,7 +32,7 @@ export const CurrentLocationButton = styled.button`
   width: 4rem;
   height: 4rem;
   border-radius: 50%;
-  background-color: #6d5c98;
+  background-color: #2b2144;
   color: #fff;
   font-size: 2.5rem;
   font-weight: 400;

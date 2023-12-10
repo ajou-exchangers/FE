@@ -91,6 +91,43 @@ export default function SearchListUI(props) {
           </S.SearchList>
         )}
       </S.SearchListWrapper>
+      <S.CategoryWrapper>
+        <S.CategoryButton
+          id="Restaurant"
+          active={props.category === 'Restaurant'}
+          onClick={(e) => props.clickCategoryButton(e)}
+        >
+          <S.CategoryIcon src="/cafe-solid.svg" alt="Restaurant" />
+        </S.CategoryButton>
+        <S.CategoryButton
+          id="Cafe"
+          active={props.category === 'Cafe'}
+          onClick={props.clickCategoryButton}
+        >
+          <S.CategoryIcon src="/restaurant-solid.svg" alt="Cafe" />
+        </S.CategoryButton>
+        <S.CategoryButton
+          id="Bank"
+          active={props.category === 'Bank'}
+          onClick={props.clickCategoryButton}
+        >
+          <S.CategoryIcon src="/bank-solid.svg" alt="Bank" />
+        </S.CategoryButton>
+        <S.CategoryButton
+          id="Pharmacy"
+          active={props.category === 'Pharmacy'}
+          onClick={props.clickCategoryButton}
+        >
+          <S.CategoryIcon src="/pharmacy-solid.svg" alt="Pharmacy" />
+        </S.CategoryButton>
+        <S.CategoryButton
+          id="Convenience Store"
+          active={props.category === 'Convenience Store'}
+          onClick={props.clickCategoryButton}
+        >
+          <S.CategoryIcon src="/shop-solid.svg" alt="Convenience store" />
+        </S.CategoryButton>
+      </S.CategoryWrapper>
       {props.selectedPlace && (
         <S.SearchDetailWrapper>
           <S.SearchDetailContainer>

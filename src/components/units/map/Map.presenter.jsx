@@ -9,7 +9,15 @@ export default function MapUI(props) {
         style={{ width: '100%', height: '100%', zIndex: '0' }}
         ref={props.mapRef}
       ></div>
-      <S.AddPlaceButton onClick={() => props.openModal(props.modalData)}>
+      <S.AddPlaceButton
+        onClick={() => {
+          if (!props.loginInfo) {
+            alert('Please login to add a place');
+            return;
+          }
+          props.openModal(props.modalData);
+        }}
+      >
         +
       </S.AddPlaceButton>
       <S.CurrentLocationButton onClick={props.moveToCurrentLocation}>
