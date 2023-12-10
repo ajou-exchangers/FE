@@ -104,7 +104,7 @@ const DeleteFixPostButton = styled.button`
 `;
 
 const Image = styled.img`
-  max-width: 100%;
+  max-width: 50%;
   height: auto;
   border-radius: 8px;
   margin-top: 16px;

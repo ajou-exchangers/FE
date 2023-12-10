@@ -24,16 +24,19 @@ const PostTitle = styled.input`
   border-radius: 3px;
   height: 30px;
   resize: none;
+  font-family: sans-serif;
 `;
 
-const Content = styled.input`
+const Content = styled.textarea`
   padding: 8px;
   margin-bottom: 16px;
   border: 1px solid #ddd;
   border-radius: 3px;
-  height: 300px;
   resize: none;
+  height: 300px;
+  font-family: sans-serif;
 `;
+
 
 const FileInputContainer = styled.label`
   position: relative;
@@ -125,17 +128,23 @@ const FixPostPage = () => {
 
   const handleFixPost = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const response = await axios.put(`https://exchangers.site/api/exchangers/v1/board/${postId}`, existingPost);
-
+      const formData = new FormData();
+      formData.append('title', existingPost.title);
+      formData.append('content', existingPost.content);
+      formData.append('image', existingPost.image);
+  
+      const response = await axios.put(`https://exchangers.site/api/exchangers/v1/board/${postId}`, formData);
+  
       setExistingPost(response.data);
-
+  
       navigate(`/board/${postId}`);
     } catch (error) {
       console.error('Error updating post:', error);
     }
   };
+  
 
   return (
     <Container>
