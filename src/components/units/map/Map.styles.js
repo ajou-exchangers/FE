@@ -24,3 +24,26 @@ export const AddPlaceButton = styled.button`
   outline: none;
   z-index: 10;
 `;
+
+export const CurrentLocationButton = styled.button`
+  position: absolute;
+  bottom: 2rem;
+  right: 8rem;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background-color: #ff8c00;
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: 400;
+  box-shadow: 0 0.2rem 0.4rem 0 #00000080;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  z-index: 10;
+`;
+
+export const CurrentLocationImg = styled.img`
+  width: 32px;
+  height: 32px;
+`;

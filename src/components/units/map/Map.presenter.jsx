@@ -12,6 +12,12 @@ export default function MapUI(props) {
       <S.AddPlaceButton onClick={() => props.openModal(props.modalData)}>
         +
       </S.AddPlaceButton>
+      <S.CurrentLocationButton onClick={props.moveToCurrentLocation}>
+        <S.CurrentLocationImg
+          src="/images/location.png"
+          alt="current location"
+        />
+      </S.CurrentLocationButton>
 
       <Modal />
     </S.MapContainer>
