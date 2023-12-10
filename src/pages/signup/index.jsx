@@ -81,51 +81,19 @@ const SignupPage = () => {
       password: '',
       confirmPassword: '',
       nickname: '',
+      profile: null,
     },
   });
 
-  const [isPasswordValid, setPasswordValid] = useState(true);
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ profileImage: null, profileImagePreview: null, });
-
-  const handleInputChange = (event) => {
-    const file = event.target.files[0];
-
-    if (file) {
-      setFormData({
-        ...formData,
-        profileImage: file,
-        profileImagePreview: URL.createObjectURL(file),
-      });
-    }
-  };
-
-  const password = watch('password');
-  const confirmPassword = watch('confirmPassword');
-
-  const handlePasswordChange = (event) => {
-    const newPassword = event.target.value;
-    const isValid = newPassword.length >= 6 && /[!@#$%^&*(),.?":{}|<>]/.test(newPassword);
-    setPasswordValid(isValid);
-  };
-
-  const validateConfirmPassword = (value) => {
-    const passwordValue = watch('password');
-
-    return value === passwordValue || 'Passwords do not match!';
-  };
-
-  const validateEmail = (email) => {
-    const isValid = email.endsWith('@ajou.ac.kr');
-    if (!isValid) {
-      setError('email', { type: 'manual', message: 'Email must end with @ajou.ac.kr' });
-    }
-    return isValid;
-  };
+  const [isPasswordValid, setPasswordValid] = useState(true);
+  const [preview, setPreview] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [nicknameAvailability, setNicknameAvailability] = useState(null);
 
   const onSubmit = async (data) => {
     try {
-      console.log(data);
+      console.log('Selected File:', selectedFile);
 
       if (!isPasswordValid || !validateEmail(data.email)) {
         alert('Invalid input. Please check the form fields.');
@@ -141,12 +109,12 @@ const SignupPage = () => {
         alert('Nickname is not available. Please choose a different nickname.');
         return;
       }
+
       const formData = new FormData();
       formData.append('email', data.email);
       formData.append('password', data.password);
-      formData.append('confirmPassword', data.confirmPassword);
       formData.append('nickname', data.nickname);
-      formData.append('profileImage', data.profileImage);
+      formData.append('profile', selectedFile);
 
       const signupResponse = await axios.post('https://exchangers.site/api/exchangers/v1/auth/signup', formData);
       alert('Signup successful! To log in, please check the authentication mail in your mailbox!');
@@ -155,7 +123,42 @@ const SignupPage = () => {
       console.error('Error during signup:', error.message);
     }
   };
-  const [nicknameAvailability, setNicknameAvailability] = useState(null);
+
+  const handleInputChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedFile(file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const password = watch('password');
+  const confirmPassword = watch('confirmPassword');
+
+  const validateEmail = (email) => {
+    const isValid = email.endsWith('@ajou.ac.kr');
+    if (!isValid) {
+      setError('email', { type: 'manual', message: 'Email must end with @ajou.ac.kr' });
+    }
+    return isValid;
+  };
+
+  const handlePasswordChange = (event) => {
+    const newPassword = event.target.value;
+    const isValid = newPassword.length >= 6 && /[!@#$%^&*(),.?":{}|<>]/.test(newPassword);
+    setPasswordValid(isValid);
+  };
+
+  const validateConfirmPassword = (value) => {
+    const passwordValue = watch('password');
+
+    return value === passwordValue || 'Passwords do not match!';
+  };
 
   const handleNicknameAvailabilityCheck = async () => {
     const nickname = watch('nickname');
@@ -175,7 +178,6 @@ const SignupPage = () => {
       }
     } catch (error) {
       console.error('Error response:', error.response.status, error.response.data);
-
       setNicknameAvailability(false);
     }
   };
@@ -303,7 +305,7 @@ const SignupPage = () => {
               className="input-icon"
             />
             <Controller
-              name="profileImage"
+              name="profile"
               control={control}
               render={({ field }) => (
                 <Input
@@ -315,11 +317,10 @@ const SignupPage = () => {
               )}
             />
           </Label>
-          <input type="file" id="input-file" style={{ display: 'none' }} />
         </FormGroup>
-        {formData.profileImagePreview && (
+        {preview && (
           <FormGroup>
-            <img src={formData.profileImagePreview}
+            <img src={preview}
               alt="Profile Preview"
               width="250"
               height="250"
