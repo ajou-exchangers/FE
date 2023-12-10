@@ -38,7 +38,7 @@ export default function SearchListUI(props) {
             })}
           </S.DropdownBox>
         )}
-        {props.searchedPlaceList && (
+        {props.searchedPlaceList.length > 0 && (
           <S.SearchList>
             {props.searchedPlaceList.map((searchedPlace, searchedIndex) => {
               return (
@@ -51,17 +51,29 @@ export default function SearchListUI(props) {
                     alt={searchedPlace.enName}
                   />
                   <S.SearchItemContent>
-                    <S.SearchItemTitle>{searchedPlace.enName}</S.SearchItemTitle>
+                    <S.SearchItemTitle>
+                      {searchedPlace.koName}
+                    </S.SearchItemTitle>
+                    <S.SearchItemTitle>
+                      {searchedPlace.enName}
+                    </S.SearchItemTitle>
                     <S.SearchItemAddress>
                       {searchedPlace.enAddress}
                     </S.SearchItemAddress>
                     <S.SearchItemComment>
-                      {searchedPlace.description}
+                      {`"${searchedPlace.description}"`}
                     </S.SearchItemComment>
                     <S.SearchItemReview>
-                      <Rate disabled defaultValue={searchedPlace.reviewAverage} />
+                      <Rate
+                        disabled
+                        style={{ fontSize: '1rem' }}
+                        defaultValue={searchedPlace.reviewAverage}
+                      />
                       <S.SearchItemReviewText>
-                        {searchedPlace.reviewCount}
+                        {searchedPlace.reviewAverage}
+                      </S.SearchItemReviewText>
+                      <S.SearchItemReviewText>
+                        {`(${searchedPlace.reviewCount} Reviews)`}
                       </S.SearchItemReviewText>
                     </S.SearchItemReview>
                   </S.SearchItemContent>
@@ -71,8 +83,8 @@ export default function SearchListUI(props) {
           </S.SearchList>
         )}
       </S.SearchListWrapper>
-      <S.SearchDetailWrapper>
-        {props.selectedPlace && (
+      {props.selectedPlace && (
+        <S.SearchDetailWrapper>
           <S.SearchDetailContainer>
             <S.SearchDetailImg
               src={props.selectedPlace.image}
@@ -118,47 +130,18 @@ export default function SearchListUI(props) {
                   <S.SearchDetailInfoAddress>
                     {props.selectedPlace.koAddress}
                   </S.SearchDetailInfoAddress>
-                  
+
                   <S.SearchDetailInfoDescription>
                     {props.selectedPlace.description}
                   </S.SearchDetailInfoDescription>
                 </S.SearchDetailInfo>
               ) : (
                 <PlaceReview place={props.placeDetail} />
-                // <S.SearchDetailReview>
-                //   <S.SearchDetailReviewButton>+</S.SearchDetailReviewButton>
-                //   <S.SearchDetailReviewList>
-                //     {props.placeDetail.reviews.length > 0 &&
-                //       props.placeDetail.reviews.map((review, reviewIndex) => {
-                //         return (
-                //           <S.SearchDetailReviewItem key={reviewIndex}>
-                //             <S.SearchDetailReviewItemHeader>
-                //               <S.SearchDetailReviewItemProfileImg
-                //                 src={review.user.profile}
-                //                 alt={review.user.name}
-                //               />
-                //               <S.SearchDetailReviewItemNickname>
-                //                 {review.user.nickname}
-                //               </S.SearchDetailReviewItemNickname>
-                //               <S.SearchDetailReviewItemCreatedAt>
-                //                 {review.createdAt}
-                //               </S.SearchDetailReviewItemCreatedAt>
-                //             </S.SearchDetailReviewItemHeader>
-                //             <S.SearchDetailReviewItemBody>
-                //               <S.SearchDetailReviewItemBodyText>
-                //                 {review.review}
-                //               </S.SearchDetailReviewItemBodyText>
-                //             </S.SearchDetailReviewItemBody>
-                //           </S.SearchDetailReviewItem>
-                //         );
-                //       })}
-                //   </S.SearchDetailReviewList>
-                // </S.SearchDetailReview>
               )}
             </S.SearchDetailBody>
           </S.SearchDetailContainer>
-        )}
-      </S.SearchDetailWrapper>
+        </S.SearchDetailWrapper>
+      )}
     </S.SideWrapper>
   );
 }
