@@ -394,3 +394,14 @@ export const SearchDetailReviewItemHeader = styled.div`
   align-items: center;
   justify-content: start;
 `;
+
+export const CopyButton = styled.button`
+  background: transparent;
+  border: none;
+  cursor: pointer;
+`;
+
+export const SearchDetailInfoAddressContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
