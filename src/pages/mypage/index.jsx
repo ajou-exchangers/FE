@@ -8,6 +8,7 @@ import { userInfo, updateUserInfo, loginState } from '../../recoil/recoil';
 
 const Container = styled.div`
   display: flex;
+  margin-top: 100px;
   max-width: 800px;
 `;
 
@@ -129,7 +130,9 @@ const MyPage = ({ userId }) => {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get('https://exchangers.site/api/exchangers/v1/user/me');
+      const response = await axios.get(
+        'https://exchangers.site/api/exchangers/v1/user/me',
+      );
 
       if (response.status === 200) {
         const userData = response.data;
@@ -147,7 +150,9 @@ const MyPage = ({ userId }) => {
   const fetchUserPosts = async () => {
     try {
       if (user && user.nickname) {
-        const response = await axios.get(`https://exchangers.site/api/exchangers/v1/user/posts`);
+        const response = await axios.get(
+          `https://exchangers.site/api/exchangers/v1/user/posts`,
+        );
         const userPosts = response.data.posts;
         setPosts(userPosts);
       }
@@ -159,7 +164,9 @@ const MyPage = ({ userId }) => {
   const fetchUserComments = async () => {
     try {
       if (user && user.nickname) {
-        const response = await axios.get(`https://exchangers.site/api/exchangers/v1/user/comments`);
+        const response = await axios.get(
+          `https://exchangers.site/api/exchangers/v1/user/comments`,
+        );
         const userComments = response.data.comments;
         setComments(userComments);
       }
@@ -179,7 +186,9 @@ const MyPage = ({ userId }) => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('https://exchangers.site/api/exchangers/v1/auth/signout');
+      await axios.post(
+        'https://exchangers.site/api/exchangers/v1/auth/signout',
+      );
       alert('Logout successful!');
       navigate('/');
       window.location.reload();
@@ -199,11 +208,10 @@ const MyPage = ({ userId }) => {
                   <h2>My Profile</h2>
                   <UserInfoContainer>
                     {user.profile ? (
-                      <ProfileImage src={user.profile}
-                        alt="Profile"
-                      />
+                      <ProfileImage src={user.profile} alt="Profile" />
                     ) : (
-                      <ProfileImage src="user-regular.svg"
+                      <ProfileImage
+                        src="user-regular.svg"
                         alt="Default Profile"
                       />
                     )}
@@ -234,8 +242,12 @@ const MyPage = ({ userId }) => {
             {posts.map((post, index) => (
               <PostTitle>
                 <div key={post.id}>
-                  <value>{index + 1}. <Link to={`/board/${post._id}`}>{post.title}</Link> </value>
-                </div></PostTitle>
+                  <value>
+                    {index + 1}.{' '}
+                    <Link to={`/board/${post._id}`}>{post.title}</Link>{' '}
+                  </value>
+                </div>
+              </PostTitle>
             ))}
           </div>
         );
@@ -245,23 +257,40 @@ const MyPage = ({ userId }) => {
           <div>
             <h2>My Comments</h2>
             {comments.map((comment, index) => (
-              <CommentTitle key={comment.id}> <value>{index + 1}. {comment.content}</value>
+              <CommentTitle key={comment.id}>
+                {' '}
+                <value>
+                  {index + 1}. {comment.content}
+                </value>
               </CommentTitle>
             ))}
           </div>
         );
-      default: return null;
+      default:
+        return null;
     }
   };
 
   return (
     <>
-      <Global styles={css`body {font-family: 'Roboto', sans-serif;}`} />
+      <Global
+        styles={css`
+          body {
+            font-family: 'Roboto', sans-serif;
+          }
+        `}
+      />
       <Container>
         <LeftNavbar>
-          <NavLink href="#" onClick={() => handleTabChange('profile')}>My Profile</NavLink>
-          <NavLink href="#" onClick={() => handleTabChange('posts')}>My Posts</NavLink>
-          <NavLink href="#" onClick={() => handleTabChange('comments')}>My Comments</NavLink>
+          <NavLink href="#" onClick={() => handleTabChange('profile')}>
+            My Profile
+          </NavLink>
+          <NavLink href="#" onClick={() => handleTabChange('posts')}>
+            My Posts
+          </NavLink>
+          <NavLink href="#" onClick={() => handleTabChange('comments')}>
+            My Comments
+          </NavLink>
 
           <Button onClick={handleLogout}>LOGOUT</Button>
         </LeftNavbar>

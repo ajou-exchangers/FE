@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const FormContainer = styled.div`
+  margin-top: 100px;
   text-align: center;
 `;
 
@@ -73,9 +74,14 @@ const ResultMessage = styled.p`
   margin-top: 4px;
 `;
 
-
 const SignupPage = () => {
-  const { handleSubmit, control, watch, setError, formState: { errors } } = useForm({
+  const {
+    handleSubmit,
+    control,
+    watch,
+    setError,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       email: '',
       password: '',
@@ -116,8 +122,13 @@ const SignupPage = () => {
       formData.append('nickname', data.nickname);
       formData.append('profile', selectedFile);
 
-      const signupResponse = await axios.post('https://exchangers.site/api/exchangers/v1/auth/signup', formData);
-      alert('Signup successful! To log in, please check the authentication mail in your mailbox!');
+      const signupResponse = await axios.post(
+        'https://exchangers.site/api/exchangers/v1/auth/signup',
+        formData,
+      );
+      alert(
+        'Signup successful! To log in, please check the authentication mail in your mailbox!',
+      );
       navigate('/');
     } catch (error) {
       console.error('Error during signup:', error.message);
@@ -143,14 +154,18 @@ const SignupPage = () => {
   const validateEmail = (email) => {
     const isValid = email.endsWith('@ajou.ac.kr');
     if (!isValid) {
-      setError('email', { type: 'manual', message: 'Email must end with @ajou.ac.kr' });
+      setError('email', {
+        type: 'manual',
+        message: 'Email must end with @ajou.ac.kr',
+      });
     }
     return isValid;
   };
 
   const handlePasswordChange = (event) => {
     const newPassword = event.target.value;
-    const isValid = newPassword.length >= 6 && /[!@#$%^&*(),.?":{}|<>]/.test(newPassword);
+    const isValid =
+      newPassword.length >= 6 && /[!@#$%^&*(),.?":{}|<>]/.test(newPassword);
     setPasswordValid(isValid);
   };
 
@@ -166,7 +181,9 @@ const SignupPage = () => {
 
     try {
       console.log(nickname);
-      const response = await axios.get(`https://exchangers.site/api/exchangers/v1/auth/check-nickname/${nickname}`);
+      const response = await axios.get(
+        `https://exchangers.site/api/exchangers/v1/auth/check-nickname/${nickname}`,
+      );
       console.log(nickname);
 
       if (response.status === 200) {
@@ -174,10 +191,17 @@ const SignupPage = () => {
         setError('nickname', {});
       } else {
         setNicknameAvailability(false);
-        setError('nickname', { type: 'manual', message: 'Nickname is not available.' });
+        setError('nickname', {
+          type: 'manual',
+          message: 'Nickname is not available.',
+        });
       }
     } catch (error) {
-      console.error('Error response:', error.response.status, error.response.data);
+      console.error(
+        'Error response:',
+        error.response.status,
+        error.response.data,
+      );
       setNicknameAvailability(false);
     }
   };
@@ -188,7 +212,8 @@ const SignupPage = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormGroup>
           <Label className="input-file-button" htmlFor="input-file">
-            <img src="envelope-regular.svg"
+            <img
+              src="envelope-regular.svg"
               width="20"
               height="20"
               alt="Email Icon"
@@ -207,13 +232,16 @@ const SignupPage = () => {
               )}
             />
             {errors.email && (
-              <p style={{ color: 'red', fontSize: '0.8em' }}>{errors.email.message}</p>
+              <p style={{ color: 'red', fontSize: '0.8em' }}>
+                {errors.email.message}
+              </p>
             )}
           </Label>
         </FormGroup>
         <FormGroup>
           <Label>
-            <img src="lock-solid.svg"
+            <img
+              src="lock-solid.svg"
               width="20"
               height="20"
               alt="locked Icon"
@@ -223,7 +251,8 @@ const SignupPage = () => {
               name="password"
               control={control}
               render={({ field }) => (
-                <Input type="password"
+                <Input
+                  type="password"
                   {...field}
                   placeholder="Password at least 6 characters"
                   onChange={(e) => {
@@ -236,13 +265,20 @@ const SignupPage = () => {
           </Label>
           {!isPasswordValid && (
             <p style={{ color: 'red', fontSize: '0.8em' }}>
-              Password must be at least 6 characters long and contain at least one special character.
+              Password must be at least 6 characters long and contain at least
+              one special character.
             </p>
           )}
         </FormGroup>
         <FormGroup>
           <Label>
-            <img src="lock-solid.svg" width="20" height="20" alt="locked Icon" className="input-icon" />
+            <img
+              src="lock-solid.svg"
+              width="20"
+              height="20"
+              alt="locked Icon"
+              className="input-icon"
+            />
             <Controller
               name="confirmPassword"
               control={control}
@@ -264,7 +300,8 @@ const SignupPage = () => {
         </FormGroup>
         <FormGroup>
           <Label>
-            <img src="user-regular.svg"
+            <img
+              src="user-regular.svg"
               width="20"
               height="20"
               alt="user Icon"
@@ -274,15 +311,14 @@ const SignupPage = () => {
               name="nickname"
               control={control}
               render={({ field }) => (
-                <Input
-                  type="text"
-                  {...field}
-                  placeholder="Your Nickname"
-                />
+                <Input type="text" {...field} placeholder="Your Nickname" />
               )}
             />
           </Label>
-          <CheckAvailabilityButton type="button" onClick={handleNicknameAvailabilityCheck}>
+          <CheckAvailabilityButton
+            type="button"
+            onClick={handleNicknameAvailabilityCheck}
+          >
             Check Nickname Availability
           </CheckAvailabilityButton>
 
@@ -320,17 +356,16 @@ const SignupPage = () => {
         </FormGroup>
         {preview && (
           <FormGroup>
-            <img src={preview}
-              alt="Profile Preview"
-              width="250"
-              height="250"
-            />
+            <img src={preview} alt="Profile Preview" width="250" height="250" />
           </FormGroup>
         )}
 
         <Button type="submit">Create an Account</Button>
       </form>
-      <p style={{ fontSize: '0.8em', color: 'gray' }}> Already have an account? <LinkStyled to="/login">Login</LinkStyled> </p>
+      <p style={{ fontSize: '0.8em', color: 'gray' }}>
+        {' '}
+        Already have an account? <LinkStyled to="/login">Login</LinkStyled>{' '}
+      </p>
     </FormContainer>
   );
 };

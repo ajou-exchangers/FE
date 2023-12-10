@@ -127,7 +127,9 @@ const Board = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [showAddButton, setShowAddButton] = useState(false);
 
-  const sortPosts = [...posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const sortPosts = [...posts].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+  );
 
   const postsPerPage = 5;
   const totalPages = Math.ceil(posts.length / postsPerPage);
@@ -136,10 +138,11 @@ const Board = () => {
   const currentPosts = sortPosts.slice(indexOfFirstPost, indexOfLastPost);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-
   const checkLoginStatus = async () => {
     try {
-      const response = await axios.get('https://exchangers.site/api/exchangers/v1/user/me');
+      const response = await axios.get(
+        'https://exchangers.site/api/exchangers/v1/user/me',
+      );
       setShowAddButton(response.status === 200);
     } catch (error) {
       setShowAddButton(false);
@@ -149,7 +152,9 @@ const Board = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('https://exchangers.site/api/exchangers/v1/board');
+        const response = await axios.get(
+          'https://exchangers.site/api/exchangers/v1/board',
+        );
         setPosts(response.data.posts);
       } catch (error) {
         console.error('Error:', error);
@@ -158,7 +163,9 @@ const Board = () => {
     fetchPosts();
   }, []);
 
-  useEffect(() => { checkLoginStatus(); }, []);
+  useEffect(() => {
+    checkLoginStatus();
+  }, []);
 
   return (
     <BoardContainer>
@@ -169,10 +176,14 @@ const Board = () => {
 
       <PostList>
         {currentPosts.map((post) => (
-          <Link key={post._id} to={{ pathname: `/board/${post._id}`, state: { post } }}>
-
+          <Link
+            key={post._id}
+            to={{ pathname: `/board/${post._id}`, state: { post } }}
+          >
             <PostListItem>
-              <PostTitle>{post.title} {post.imageUrl && '🖼️'} </PostTitle>
+              <PostTitle>
+                {post.title} {post.imageUrl && '🖼️'}{' '}
+              </PostTitle>
               <PostInfo>
                 <LikeCount>💜 {post.likes}</LikeCount>
                 <CommentCount>🗒️ {post.comments}</CommentCount>
@@ -186,7 +197,11 @@ const Board = () => {
 
       <Pagination>
         <ArrowButton onClick={() => paginate(1)}>{'◀'}</ArrowButton>
-        {Array.from({ length: totalPages }).map((_, index) => (<button key={index + 1} onClick={() => paginate(index + 1)}>{index + 1}</button>))}
+        {Array.from({ length: totalPages }).map((_, index) => (
+          <button key={index + 1} onClick={() => paginate(index + 1)}>
+            {index + 1}
+          </button>
+        ))}
         <ArrowButton onClick={() => paginate(totalPages)}>{'▶'}</ArrowButton>
       </Pagination>
     </BoardContainer>

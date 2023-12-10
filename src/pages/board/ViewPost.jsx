@@ -8,7 +8,7 @@ import { useRecoilValue } from 'recoil';
 const ViewPostPageWrapper = styled.div`
   max-width: 800px;
   margin: 0 auto;
-  margin-top: 50px;
+  margin-top: 100px;
 `;
 
 const PostContentWrapper = styled.div`
@@ -149,7 +149,7 @@ const EditCommentButton = styled.button`
 
 const SaveButton = styled.button`
   color: #fff;
-  background-color: #4caf50; 
+  background-color: #4caf50;
   padding: 5px;
   width: 40px;
   cursor: pointer;
@@ -185,7 +185,9 @@ const ViewPostPage = () => {
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        const response = await axios.get('https://exchangers.site/api/exchangers/v1/user/me');
+        const response = await axios.get(
+          'https://exchangers.site/api/exchangers/v1/user/me',
+        );
 
         if (response.status === 200) {
           const { email, nickname, profile } = response.data;
@@ -218,7 +220,9 @@ const ViewPostPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://exchangers.site/api/exchangers/v1/board/${postId}`);
+        const response = await axios.get(
+          `https://exchangers.site/api/exchangers/v1/board/${postId}`,
+        );
         setPost(response.data);
         setIsLiked(response.data.liked);
       } catch (error) {
@@ -232,11 +236,12 @@ const ViewPostPage = () => {
 
   const handleDeletePost = async () => {
     try {
-      await axios.delete(`https://exchangers.site/api/exchangers/v1/board/${postId}`);
+      await axios.delete(
+        `https://exchangers.site/api/exchangers/v1/board/${postId}`,
+      );
       alert('Post Deleted');
       navigate('/board');
-    }
-    catch (error) {
+    } catch (error) {
       console.error('Error deleting post:', error);
       alert('Error deleting post');
     }
@@ -248,8 +253,14 @@ const ViewPostPage = () => {
 
   const handleLike = async () => {
     try {
-      await axios.put(`https://exchangers.site/api/exchangers/v1/board/${postId}/like`);
-      setPost((prevPost) => ({ ...prevPost, liked: !prevPost.liked, likes: prevPost.likes + (prevPost.liked ? -1 : 1) }));
+      await axios.put(
+        `https://exchangers.site/api/exchangers/v1/board/${postId}/like`,
+      );
+      setPost((prevPost) => ({
+        ...prevPost,
+        liked: !prevPost.liked,
+        likes: prevPost.likes + (prevPost.liked ? -1 : 1),
+      }));
       setIsLiked((prevIsLiked) => !prevIsLiked);
     } catch (error) {
       console.error('Error liking post:', error);
@@ -265,10 +276,10 @@ const ViewPostPage = () => {
         `https://exchangers.site/api/exchangers/v1/board/${postId}/comment`,
         formData,
         {
-          headers: { 'Content-Type': 'multipart/form-data', },
-        }
+          headers: { 'Content-Type': 'multipart/form-data' },
+        },
       );
-      window.location.reload()
+      window.location.reload();
 
       setPost((prevPost) => ({
         ...prevPost,
@@ -287,13 +298,18 @@ const ViewPostPage = () => {
 
   const handleSaveEditComment = async (commentId, newText) => {
     try {
-      await axios.put(`https://exchangers.site/api/exchangers/v1/board/${postId}/comment/${commentId}`, {
-        content: newText,
-      });
+      await axios.put(
+        `https://exchangers.site/api/exchangers/v1/board/${postId}/comment/${commentId}`,
+        {
+          content: newText,
+        },
+      );
 
       setPost((prevPost) => {
         const updatedComments = prevPost.comments.map((comment) =>
-          comment._id === commentId ? { ...comment, content: newText } : comment
+          comment._id === commentId
+            ? { ...comment, content: newText }
+            : comment,
         );
         return { ...prevPost, comments: updatedComments };
       });
@@ -310,10 +326,14 @@ const ViewPostPage = () => {
 
   const handleDeleteComment = async (commentId, index) => {
     try {
-      await axios.delete(`https://exchangers.site/api/exchangers/v1/board/${postId}/comment/${commentId}`);
+      await axios.delete(
+        `https://exchangers.site/api/exchangers/v1/board/${postId}/comment/${commentId}`,
+      );
 
       setPost((prevPost) => {
-        const updatedComments = prevPost.comments.filter((comment) => comment._id !== commentId);
+        const updatedComments = prevPost.comments.filter(
+          (comment) => comment._id !== commentId,
+        );
         return { ...prevPost, comments: updatedComments };
       });
     } catch (error) {
@@ -323,13 +343,19 @@ const ViewPostPage = () => {
 
   const handleLikeComment = async (commentId) => {
     try {
-      await axios.put(`https://exchangers.site/api/exchangers/v1/board/${postId}/comment/${commentId}/like`);
+      await axios.put(
+        `https://exchangers.site/api/exchangers/v1/board/${postId}/comment/${commentId}/like`,
+      );
 
       setPost((prevPost) => {
         const updatedComments = prevPost.comments.map((comment) =>
           comment._id === commentId
-            ? { ...comment, liked: !comment.liked, likes: comment.likes + (comment.liked ? -1 : 1) }
-            : comment
+            ? {
+                ...comment,
+                liked: !comment.liked,
+                likes: comment.likes + (comment.liked ? -1 : 1),
+              }
+            : comment,
         );
         return { ...prevPost, comments: updatedComments };
       });
@@ -337,8 +363,6 @@ const ViewPostPage = () => {
       console.error('Error liking comment:', error);
     }
   };
-
-
 
   return (
     <ViewPostPageWrapper>
@@ -357,8 +381,14 @@ const ViewPostPage = () => {
         <MetaInfo>
           {isLoggedIn && isPostOwner && (
             <>
-              <DeleteFixPostButton onClick={handleFixPost}> 🛠️</DeleteFixPostButton>
-              <DeleteFixPostButton onClick={handleDeletePost}> 🗑️</DeleteFixPostButton>
+              <DeleteFixPostButton onClick={handleFixPost}>
+                {' '}
+                🛠️
+              </DeleteFixPostButton>
+              <DeleteFixPostButton onClick={handleDeletePost}>
+                {' '}
+                🗑️
+              </DeleteFixPostButton>
             </>
           )}
         </MetaInfo>
@@ -383,32 +413,58 @@ const ViewPostPage = () => {
                     <CommentInput
                       type="text"
                       value={comment.content}
-                      onChange={(e) => setPost((prevPost) => ({
-                        ...prevPost,
-                        comments: prevPost.comments.map((c) =>
-                          c._id === comment._id ? { ...c, content: e.target.value } : c
-                        ),
-                      }))}
+                      onChange={(e) =>
+                        setPost((prevPost) => ({
+                          ...prevPost,
+                          comments: prevPost.comments.map((c) =>
+                            c._id === comment._id
+                              ? { ...c, content: e.target.value }
+                              : c,
+                          ),
+                        }))
+                      }
                     />
                     <div>
-                      <SaveButton onClick={() => handleSaveEditComment(comment._id, comment.content)}>🫙</SaveButton>
-                      <CancelButton onClick={handleCancelEditComment}>✖️</CancelButton>
+                      <SaveButton
+                        onClick={() =>
+                          handleSaveEditComment(comment._id, comment.content)
+                        }
+                      >
+                        🫙
+                      </SaveButton>
+                      <CancelButton onClick={handleCancelEditComment}>
+                        ✖️
+                      </CancelButton>
                     </div>
                   </>
                 ) : (
                   <>
                     <CommentText>
-                      <strong>{comment.author?.nickname}</strong>: {comment.content}
+                      <strong>{comment.author?.nickname}</strong>:{' '}
+                      {comment.content}
                     </CommentText>
                     <div>
-                      <LikeCommentButton onClick={() => handleLikeComment(comment._id)}>👍</LikeCommentButton>
+                      <LikeCommentButton
+                        onClick={() => handleLikeComment(comment._id)}
+                      >
+                        👍
+                      </LikeCommentButton>
                       <span>{comment.likes}</span>
-                      {isLoggedIn && (comment.author?.nickname === user.nickname) && (
-                        <>
-                          <EditCommentButton onClick={() => handleEditComment(comment._id)}>✏️</EditCommentButton>
-                          <DeleteCommentButton onClick={() => handleDeleteComment(comment._id)}>❌</DeleteCommentButton>
-                        </>
-                      )}
+                      {isLoggedIn &&
+                        comment.author?.nickname === user.nickname && (
+                          <>
+                            <EditCommentButton
+                              onClick={() => handleEditComment(comment._id)}
+                            >
+                              ✏️
+                            </EditCommentButton>
+                            <DeleteCommentButton
+                              onClick={() => handleDeleteComment(comment._id)}
+                            >
+                              ❌
+                            </DeleteCommentButton>
+                          </>
+                        )}
                     </div>
                   </>
                 )}

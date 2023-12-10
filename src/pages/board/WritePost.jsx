@@ -38,7 +38,7 @@ const Content = styled.input`
 const FileInputContainer = styled.label`
   position: relative;
   display: inline-block;
-  background-image: url("/image-add-button_icon-icons.com_71462.png");
+  background-image: url('/image-add-button_icon-icons.com_71462.png');
   background-size: 30px;
   background-position: center;
   background-repeat: no-repeat;
@@ -84,7 +84,11 @@ const Button = styled.button`
 
 const WritePostPage = ({ onAddPost }) => {
   const navigate = useNavigate();
-  const [newPost, setNewPost] = useState({ title: '', content: '', image: null });
+  const [newPost, setNewPost] = useState({
+    title: '',
+    content: '',
+    image: null,
+  });
   const [imagePreview, setImagePreview] = useState(null);
 
   const handleInputChange = (e) => {
@@ -111,7 +115,10 @@ const WritePostPage = ({ onAddPost }) => {
       formData.append('content', newPost.content);
       formData.append('image', newPost.image);
 
-      await axios.post('https://exchangers.site/api/exchangers/v1/board', formData);
+      await axios.post(
+        'https://exchangers.site/api/exchangers/v1/board',
+        formData,
+      );
 
       setNewPost({ title: '', content: '', image: null });
       setImagePreview(null);
@@ -144,10 +151,11 @@ const WritePostPage = ({ onAddPost }) => {
             accept="image/*"
             onChange={handleImageChange}
           />
-
         </FileInputContainer>
         {imagePreview && <ImagePreview src={imagePreview} />}
-        <Button type="button" onClick={handleAddPost}>Add Post</Button>
+        <Button type="button" onClick={handleAddPost}>
+          Add Post
+        </Button>
       </Form>
     </Container>
   );

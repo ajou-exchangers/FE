@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Global, css } from '@emotion/react';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGlobeAmericas } from '@fortawesome/free-solid-svg-icons';
 
 const MainPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -9,7 +11,9 @@ const MainPage = () => {
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        const response = await axios.get('https://exchangers.site/api/exchangers/v1/user/me');
+        const response = await axios.get(
+          'https://exchangers.site/api/exchangers/v1/user/me',
+        );
         setIsLoggedIn(response.status === 200);
       } catch (error) {
         setIsLoggedIn(false);
@@ -23,9 +27,15 @@ const MainPage = () => {
       <Global styles={globalStyles} />
       <div style={styles.pageContainer}>
         <div style={styles.container}>
+          <FontAwesomeIcon
+            icon={faGlobeAmericas}
+            style={{ color: '#fcfcfc', fontSize: '128px' }}
+          />
           <h1 style={styles.heading}>Welcome to Exchangers!</h1>
           {!isLoggedIn && (
-            <Link to="/map" style={styles.link}>Try without Login</Link>
+            <Link to="/map" style={styles.link}>
+              Try without Login
+            </Link>
           )}
         </div>
 
@@ -35,11 +45,15 @@ const MainPage = () => {
             <img src="./globe-americas-solid.svg" style={styles.icon} />
 
             <div style={styles.linkContainer}>
-              <Link to="/login" style={styles.link}>Login</Link>
+              <Link to="/login" style={styles.link}>
+                Login
+              </Link>
             </div>
 
             <div style={styles.linkContainer}>
-              <Link to="/signup" style={styles.link}>Signup</Link>
+              <Link to="/signup" style={styles.link}>
+                Signup
+              </Link>
             </div>
           </div>
         )}

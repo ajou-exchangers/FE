@@ -37,11 +37,10 @@ const Content = styled.textarea`
   font-family: sans-serif;
 `;
 
-
 const FileInputContainer = styled.label`
   position: relative;
   display: inline-block;
-  background-image: url("/image-add-button_icon-icons.com_71462.png");
+  background-image: url('/image-add-button_icon-icons.com_71462.png');
   background-size: 30px;
   background-position: center;
   background-repeat: no-repeat;
@@ -88,13 +87,19 @@ const Button = styled.button`
 const FixPostPage = () => {
   const navigate = useNavigate();
   const { id: postId } = useParams();
-  const [existingPost, setExistingPost] = useState({ title: '', content: '', image: null });
+  const [existingPost, setExistingPost] = useState({
+    title: '',
+    content: '',
+    image: null,
+  });
   const [imagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
     const fetchPostData = async () => {
       try {
-        const response = await axios.get(`https://exchangers.site/api/exchangers/v1/board/${postId}`);
+        const response = await axios.get(
+          `https://exchangers.site/api/exchangers/v1/board/${postId}`,
+        );
         const postToFix = response.data;
         setExistingPost({
           title: postToFix.title || '',
@@ -128,23 +133,25 @@ const FixPostPage = () => {
 
   const handleFixPost = async (e) => {
     e.preventDefault();
-  
+
     try {
       const formData = new FormData();
       formData.append('title', existingPost.title);
       formData.append('content', existingPost.content);
       formData.append('image', existingPost.image);
-  
-      const response = await axios.put(`https://exchangers.site/api/exchangers/v1/board/${postId}`, formData);
-  
+
+      const response = await axios.put(
+        `https://exchangers.site/api/exchangers/v1/board/${postId}`,
+        formData,
+      );
+
       setExistingPost(response.data);
-  
+
       navigate(`/board/${postId}`);
     } catch (error) {
       console.error('Error updating post:', error);
     }
   };
-  
 
   return (
     <Container>
@@ -169,7 +176,9 @@ const FixPostPage = () => {
             onChange={handleImageChange}
           />
         </FileInputContainer>
-        {imagePreview && <ImagePreview src={imagePreview} alt="Image Preview" />}
+        {imagePreview && (
+          <ImagePreview src={imagePreview} alt="Image Preview" />
+        )}
 
         <Button type="submit">Fix Post</Button>
       </Form>

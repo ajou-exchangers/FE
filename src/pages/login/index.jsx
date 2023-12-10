@@ -9,6 +9,7 @@ import { updateUserInfo, loginState } from '../../recoil/recoil';
 axios.defaults.withCredentials = true;
 
 const FormContainer = styled.div`
+  margin-top: 100px;
   text-align: center;
 `;
 
@@ -97,12 +98,16 @@ export default function LoginPage() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post('https://exchangers.site/api/exchangers/v1/auth/signin', {
-        email: data.email,
-        password: data.password,
-      }, {
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        'https://exchangers.site/api/exchangers/v1/auth/signin',
+        {
+          email: data.email,
+          password: data.password,
+        },
+        {
+          withCredentials: true,
+        },
+      );
       console.log('Login response:', response.data);
       setLoggedIn(true);
       setUserInfo(response.data);
@@ -111,14 +116,15 @@ export default function LoginPage() {
 
       alert('Signin successful!');
       navigate('/map');
-
     } catch (error) {
       console.error('Error:', error.response?.data || error.message);
 
       if (error.response?.data === 'Email not verified') {
         setLoginError('');
         setLoginSuccess(false);
-        setLoginError('Please check your mailbox and proceed with email authentication!');
+        setLoginError(
+          'Please check your mailbox and proceed with email authentication!',
+        );
       } else {
         setLoggedIn(false);
         setLoginError('Invalid email or password. Please try again.');
