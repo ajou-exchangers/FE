@@ -49,6 +49,7 @@ export default function AddPlaceFormUI(props) {
         <Controller
           control={props.control}
           name="hasKiosk"
+          defaultValue={false}
           render={({ field }) => (
             <S.OptionLabel
               onClick={() => field.onChange(!field.value)}
@@ -66,6 +67,7 @@ export default function AddPlaceFormUI(props) {
         <Controller
           control={props.control}
           name="hasParking"
+          defaultValue={false}
           render={({ field }) => (
             <S.OptionLabel
               onClick={() => field.onChange(!field.value)}
@@ -83,6 +85,7 @@ export default function AddPlaceFormUI(props) {
         <Controller
           control={props.control}
           name="englishAvailable"
+          defaultValue={false}
           render={({ field }) => (
             <S.OptionLabel
               onClick={() => field.onChange(!field.value)}
@@ -100,6 +103,7 @@ export default function AddPlaceFormUI(props) {
         <Controller
           control={props.control}
           name="wifiAvailable"
+          defaultValue={false}
           render={({ field }) => (
             <S.OptionLabel
               onClick={() => field.onChange(!field.value)}
