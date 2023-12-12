@@ -104,7 +104,6 @@ export const ReviewList = styled.div`
 
 export const ReviewItem = styled.div`
   width: 100%;
-  height: 30rem;
   margin: 0;
   padding: 0;
   display: flex;

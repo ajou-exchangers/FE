@@ -22,8 +22,6 @@ export default function PlaceReview(props) {
     ),
   };
 
-  console.log('props.place', props.place);
-
   return (
     <S.Wrapper>
       <S.ReviewHeader>
@@ -37,7 +35,7 @@ export default function PlaceReview(props) {
             allowHalf
             style={{ fontSize: '1rem' }}
             defaultValue={0}
-            value={Math.round(props.place.location.reviewAverage)}
+            value={props.place.location.reviewAverage}
           />
           <S.HeaderTotalReviewCount>
             {props.place.location.reviewCount} Reviews

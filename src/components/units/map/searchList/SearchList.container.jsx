@@ -39,7 +39,6 @@ export default function SearchList(props) {
         throw new Error(response.status);
       }
       const result = await response.json();
-      console.log(result);
       setPlaceDetail(result);
     } catch {
       console.log(error);

@@ -74,8 +74,10 @@ export default function SearchListUI(props) {
                     <S.SearchItemReview>
                       <Rate
                         disabled
+                        allowHalf
                         style={{ fontSize: '1rem' }}
-                        defaultValue={searchedPlace.reviewAverage}
+                        defaultValue={0}
+                        value={searchedPlace.reviewAverage}
                       />
                       <S.SearchItemReviewText>
                         {searchedPlace.reviewAverage}

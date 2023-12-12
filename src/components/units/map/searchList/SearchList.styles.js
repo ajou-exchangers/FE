@@ -361,7 +361,6 @@ export const Icon = styled.img`
   width: 20px;
   height: 20px;
   margin-right: 0.5rem;
-  padding: 0;
 `;
 
 export const SearchDetailInfoAddress = styled.div`
@@ -473,7 +472,7 @@ export const AdditionalInfo = styled.div`
 export const AdditionalInfoDescription = styled.div`
   margin-left: 1rem;
   width: 100%;
-  height: 100%;
+  height: 24px;
   margin: 0;
   padding: 0;
   font-size: 16px;
